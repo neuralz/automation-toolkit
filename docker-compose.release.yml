@@ -6,6 +6,9 @@ services:
       - "8663:8663"
     links:
       - api
+    volumes:
+      - ./web/dist:/app/dist
+      - ./health-logs:/app/dist/health-logs
   api:
     image: ercdex/mm-api:$HASH
     ports:
@@ -23,6 +26,8 @@ services:
       - ETHEREUM_CHAIN
     links:
       - parity
+    volumes:
+      - ./health-logs:/health-logs
   parity:
     image: ercdex/mm-parity:$HASH
     expose:
