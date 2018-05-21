@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as request from 'request-promise-native';
 import * as Web3 from 'web3';
 import { config } from '../config';
@@ -60,6 +61,7 @@ export class Web3Service {
   public async getParityNodeHealth(): Promise<INodeHealth> {
     try {
       const health = await this.executeRpcCommand<IParityHealth>('parity_nodeHealth');
+      fs.writeFileSync('/health-logs/latest-health.json', JSON.stringify(health));
       if (health.result.peers.status !== 'ok'
         // we're going to say this is okay
         // && health.result.peers.message !== 'You are connected to only one peer. Your node might not be reliable. Check your network connection.'

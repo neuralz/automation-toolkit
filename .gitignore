@@ -7,3 +7,4 @@ data
 .env
 release
 release-*.zip
+health-logs

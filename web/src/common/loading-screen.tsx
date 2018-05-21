@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface ILoadingScreenProps {
-  message?: string;
+  message?: React.ReactNode;
   height?: string;
   className?: string;
   width?: string;

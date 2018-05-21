@@ -8,6 +8,8 @@ services:
       - api
     volumes:
       - ./web/src:/app/src
+      - ./web/dist:/app/dist
+      - ./health-logs:/app/dist/health-logs
   api:
     build: ./api
     ports:
@@ -30,6 +32,7 @@ services:
     volumes:
       - ./aqueduct-remote/dist:/app/dist
       - ./aqueduct-remote/src:/app/src
+      - ./health-logs:/health-logs
   parity:
     build: ./parity
     expose:

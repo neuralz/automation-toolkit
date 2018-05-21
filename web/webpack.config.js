@@ -85,7 +85,6 @@ const config = {
       title: 'Market Maker Dashboard | ERC dEX',
       template: 'src/index.ejs'
     }),
-    new CleanWebpackPlugin(['dist']),
     new ExtractTextPlugin({
       filename: '[name].[hash].css'
     }),
