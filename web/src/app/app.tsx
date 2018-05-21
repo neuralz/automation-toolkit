@@ -38,7 +38,12 @@ interface IParityHealth {
 @withRouter
 @observer
 export class App extends React.Component<IAppProps> {
-  @observable private health?: IParityHealth;
+  private interval: any;
+  @observable private health?: {
+    status: 'ready' | 'pending';
+    message: string;
+    peers: [number, number]
+  };
 
   constructor(public readonly props: IAppProps) {
     super(props);
@@ -50,12 +55,11 @@ export class App extends React.Component<IAppProps> {
       return <LoadingScreen />;
     }
 
-    const message = this.getHealthMessage(this.health);
-    if (message) {
+    if (this.health.status === 'pending') {
       return (
         <LoadingScreen message={(<div>
-          <div>{message}</div>
-          <strong>{this.health.result.peers.details[0]}/{this.health.result.peers.details[1]} peers</strong>
+          <div>{this.health.message}</div>
+          <strong>{this.health.peers[0]}/{this.health.peers[1]} peers</strong>
         </div>)} />
       );
     }
@@ -87,7 +91,7 @@ export class App extends React.Component<IAppProps> {
   }
 
   private async beginHealthPolling() {
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.loadLogs();
     }, 5000);
     this.loadLogs();
@@ -96,7 +100,23 @@ export class App extends React.Component<IAppProps> {
   private loadLogs() {
     request('/health-logs/latest-health.json')
       .end((_err, res) => {
-        this.health = res.body;
+        const health: IParityHealth = res.body;
+
+        const message = this.getHealthMessage(health);
+        if (!message) {
+          this.health = {
+            message: 'ready',
+            peers: health.result.peers.details,
+            status: 'ready'
+          };
+          clearInterval(this.interval);
+        } else {
+          this.health = {
+            message,
+            peers: health.result.peers.details,
+            status: 'pending'
+          };
+        }
       });
   }
 }
