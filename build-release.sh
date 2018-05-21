@@ -22,4 +22,4 @@ cp README.MD ./release
 cp run-kovan.sh ./release
 cp run-mainnet.sh ./release
 cp check-path.sh ./release
-zip -r "release-$HASH.zip" ./release
+zip -r "release.zip" ./release
