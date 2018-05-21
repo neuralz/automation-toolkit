@@ -13,8 +13,13 @@ The ERC dEX Automation Toolkit allows traders to create custom trading strategie
     - Allow significant disk space (current recommendation: 50 GB)
 
 ## Download
-- Download the latest version from [Releases](https://github.com/ERCdEX/automation-toolkit/releases) and unpack the .zip in a location of your choice
+- Run installation script
+    - `bash <(curl -s https://raw.githubusercontent.com/ERCdEX/automation-toolkit/master/update.sh)`
+    - Or: Download the latest version from [Releases](https://github.com/ERCdEX/automation-toolkit/releases) and unpack the .zip in a location of your choice
 - Alternatively, run from source by cloning the repository
+
+# Downloading updates
+- Run `sh update.sh`
 
 # Configuration
 

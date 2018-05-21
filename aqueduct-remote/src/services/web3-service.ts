@@ -61,6 +61,7 @@ export class Web3Service {
   public async getParityNodeHealth(): Promise<INodeHealth> {
     try {
       const health = await this.executeRpcCommand<IParityHealth>('parity_nodeHealth');
+      if (!fs.existsSync('/health-logs')) { fs.mkdirSync('/health-logs'); }
       fs.writeFileSync('/health-logs/latest-health.json', JSON.stringify(health));
       if (health.result.peers.status !== 'ok'
         // we're going to say this is okay
