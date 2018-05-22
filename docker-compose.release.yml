@@ -6,6 +6,8 @@ services:
       - "8663:8663"
     links:
       - api
+    environment:
+      - TOOLKIT_VERSION=$TOOLKIT_VERSION
     volumes:
       - ./web/dist:/app/dist
       - ./health-logs:/app/dist/health-logs
@@ -35,6 +37,7 @@ services:
       - "8545"
     environment:
       - ETHEREUM_CHAIN
+      - SYNC_BLOCK
     volumes:
       - ./parity-data:/root/.local/share/io.parity.ethereum/
     entrypoint: /bin/bash

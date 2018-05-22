@@ -1,3 +1,3 @@
-FROM parity/parity:v1.10.1
+FROM parity/parity:v1.11.1
 
 COPY ./start.sh /runtime-scripts/start.sh

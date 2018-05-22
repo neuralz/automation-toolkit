@@ -1,2 +1,2 @@
 sh ./check-path.sh
-ETHEREUM_CHAIN=foundation docker-compose up --build
+ETHEREUM_CHAIN=foundation SYNC_BLOCK=5648285 docker-compose up --build

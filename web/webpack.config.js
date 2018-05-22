@@ -89,7 +89,10 @@ const config = {
       filename: '[name].[hash].css'
     }),
     new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en)$/),
-    new webpack.optimize.ModuleConcatenationPlugin()
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.DefinePlugin({
+      'TOOLKIT_VERSION': `'${process.env.TOOLKIT_VERSION || 'DEV'}'`
+    })
   ],
   devtool: 'source-map'
 };
