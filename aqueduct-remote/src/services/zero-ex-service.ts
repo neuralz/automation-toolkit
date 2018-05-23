@@ -25,6 +25,24 @@ export class ZeroExService {
     return balance.toString();
   }
 
+  public async getTokenAllowance(tokenAddress: string) {
+    const account = await new Web3Service().getAccount();
+    const allowance = await this.zeroEx.token.getProxyAllowanceAsync(tokenAddress, account);
+    return allowance.toString();
+  }
+
+  public async setTokenAllowance(tokenAddress: string) {
+    try {
+      console.log(`setting allowance for ${tokenAddress}`);
+      const account = await new Web3Service().getAccount();
+      const txHash = await this.zeroEx.token.setUnlimitedProxyAllowanceAsync(tokenAddress, account);
+      console.log(`set allowance @ ${txHash}`);
+      await this.zeroEx.awaitTransactionMinedAsync(txHash);
+    } catch (err) {
+      throw new ServerError(`error setting token allowance: ${err.message}`, 500);
+    }
+  }
+
   public async getCancelReceipt(txHash: string): Promise<ICancelReceipt> {
     try {
       const receipt = await this.zeroEx.awaitTransactionMinedAsync(txHash, 5000);

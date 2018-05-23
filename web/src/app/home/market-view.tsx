@@ -119,7 +119,7 @@ export class MarketView extends React.Component<IMarketViewProps> {
         {this.confirmStart && <EnterPassphraseModal message='Enter your account passphrase to start the market'
           onClose={this.onCloseEnterPassphrase} onSubmit={this.startMarket(this.market)} submitText='Start Market' />}
         {this.confirmDeleteProps && <ConfirmModal {...this.confirmDeleteProps}>
-          Are you sure you want to remove this market? This action is irriversible.
+          Are you sure you want to remove this market? This action is irreversible.
           </ConfirmModal>}
         {this.isEditing && <EditMarket onClose={this.onCloseEditMarket} market={this.market} onSuccess={this.onSuccess} />}
       </div>

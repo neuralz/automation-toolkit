@@ -1,0 +1,19 @@
+.create-market {
+  .fa-exclamation-circle {
+    color: #cb3131;
+  }
+
+  .error-box {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f0f0f0;
+
+    .line-item {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

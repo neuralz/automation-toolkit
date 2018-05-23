@@ -230,6 +230,44 @@ export function RegisterRoutes(app: any) {
             const promise = controller.getBalance.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
+    app.get('/api/wallet/allowance',
+        function(request: any, response: any, next: any) {
+            const args = {
+                tokenAddress: { "in": "query", "name": "tokenAddress", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new WalletController();
+
+
+            const promise = controller.getAllowance.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/wallet/unlimited_allowance',
+        function(request: any, response: any, next: any) {
+            const args = {
+                tokenAddress: { "in": "query", "name": "tokenAddress", "required": true, "dataType": "string" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new WalletController();
+
+
+            const promise = controller.setUnlimitedAllowance.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
     app.get('/api/wallet/eth_balance',
         function(request: any, response: any, next: any) {
             const args = {

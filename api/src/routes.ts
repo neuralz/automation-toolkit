@@ -13,6 +13,18 @@ const models: TsoaRoute.Models = {
             "key": { "dataType": "string", "required": true },
         },
     },
+    "ITokenStats": {
+        "properties": {
+            "balance": { "dataType": "string", "required": true },
+            "allowance": { "dataType": "string", "required": true },
+        },
+    },
+    "ISetAllowanceRequest": {
+        "properties": {
+            "passphrase": { "dataType": "string", "required": true },
+            "tokenAddress": { "dataType": "string", "required": true },
+        },
+    },
     "IStoredBand": {
         "properties": {
             "marketId": { "dataType": "string", "required": true },
@@ -206,7 +218,7 @@ export function RegisterRoutes(app: any) {
             const promise = controller.importAccount.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
-    app.get('/api/accounts/get_token_balance',
+    app.get('/api/accounts/get_token_stats',
         function(request: any, response: any, next: any) {
             const args = {
                 tokenAddress: { "in": "query", "name": "tokenAddress", "required": true, "dataType": "string" },
@@ -222,7 +234,26 @@ export function RegisterRoutes(app: any) {
             const controller = new AccountsController();
 
 
-            const promise = controller.getTokenBalance.apply(controller, validatedArgs);
+            const promise = controller.getTokenStats.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/accounts/set_unlimited_allowance',
+        function(request: any, response: any, next: any) {
+            const args = {
+                request: { "in": "body", "name": "request", "required": true, "ref": "ISetAllowanceRequest" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new AccountsController();
+
+
+            const promise = controller.setUnlimitedAllowance.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/accounts/get_eth_balance',

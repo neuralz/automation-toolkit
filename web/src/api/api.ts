@@ -18,6 +18,16 @@ export namespace Dashboard {
       key: string;
     }
 
+    export interface ITokenStats {
+      balance: string;
+      allowance: string;
+    }
+
+    export interface ISetAllowanceRequest {
+      passphrase: string;
+      tokenAddress: string;
+    }
+
     export interface IStoredBand {
       marketId: string;
       units: number;
@@ -160,8 +170,12 @@ export namespace Dashboard {
       request: IImportAccountRequest;
     }
 
-    export interface IAccountsGetTokenBalanceParams {
+    export interface IAccountsGetTokenStatsParams {
       tokenAddress: string;
+    }
+
+    export interface IAccountsSetUnlimitedAllowanceParams {
+      request: ISetAllowanceRequest;
     }
 
     export interface IBandsGetParams {
@@ -239,16 +253,26 @@ export namespace Dashboard {
         return this.executeRequest<void>(requestParams);
       }
 
-      public async getTokenBalance(params: IAccountsGetTokenBalanceParams) {
+      public async getTokenStats(params: IAccountsGetTokenStatsParams) {
         const requestParams: IRequestParams = {
           method: 'GET',
-          url: `${baseApiUrl}/api/accounts/get_token_balance`
+          url: `${baseApiUrl}/api/accounts/get_token_stats`
         };
 
         requestParams.queryParameters = {
           tokenAddress: params.tokenAddress,
         };
-        return this.executeRequest<string>(requestParams);
+        return this.executeRequest<ITokenStats>(requestParams);
+      }
+
+      public async setUnlimitedAllowance(params: IAccountsSetUnlimitedAllowanceParams) {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/accounts/set_unlimited_allowance`
+        };
+
+        requestParams.body = params.request;
+        return this.executeRequest<void>(requestParams);
       }
 
       public async getEthBalance() {

@@ -36,6 +36,18 @@ export class WalletController {
     return await new ZeroExService().getTokenBalance(tokenAddress);
   }
 
+  @Get('allowance')
+  @Tags('Wallet')
+  public async getAllowance(@Query() tokenAddress: string): Promise<string> {
+    return await new ZeroExService().getTokenAllowance(tokenAddress);
+  }
+
+  @Post('unlimited_allowance')
+  @Tags('Wallet')
+  public async setUnlimitedAllowance(@Query() tokenAddress: string) {
+    await new ZeroExService().setTokenAllowance(tokenAddress);
+  }
+
   @Get('eth_balance')
   @Tags('Wallet')
   public async getEthBalance(): Promise<string> {

@@ -105,6 +105,14 @@ export namespace AqueductRemote {
     export interface IWalletGetBalanceParams {
       tokenAddress: string;
     }
+
+    export interface IWalletGetAllowanceParams {
+      tokenAddress: string;
+    }
+
+    export interface IWalletSetUnlimitedAllowanceParams {
+      tokenAddress: string;
+    }
     export interface ITradingService {
       createLimitOrder(params: ITradingCreateLimitOrderParams): Promise<IOrder>;
       cancelOrder(params: ITradingCancelOrderParams): Promise<string>;
@@ -155,6 +163,8 @@ export namespace AqueductRemote {
       importAccount(params: IWalletImportAccountParams): Promise<void>;
       unlockAccount(params: IWalletUnlockAccountParams): Promise<any>;
       getBalance(params: IWalletGetBalanceParams): Promise<string>;
+      getAllowance(params: IWalletGetAllowanceParams): Promise<string>;
+      setUnlimitedAllowance(params: IWalletSetUnlimitedAllowanceParams): Promise<void>;
       getEthBalance(): Promise<string>;
       getNodeHealth(): Promise<INodeHealth>;
       getNetwork(): Promise<INetwork>;
@@ -200,6 +210,30 @@ export namespace AqueductRemote {
           tokenAddress: params.tokenAddress,
         };
         return this.executeRequest<string>(requestParams);
+      }
+
+      public async getAllowance(params: IWalletGetAllowanceParams) {
+        const requestParams: IRequestParams = {
+          method: 'GET',
+          url: `${baseApiUrl}/api/wallet/allowance`
+        };
+
+        requestParams.queryParameters = {
+          tokenAddress: params.tokenAddress,
+        };
+        return this.executeRequest<string>(requestParams);
+      }
+
+      public async setUnlimitedAllowance(params: IWalletSetUnlimitedAllowanceParams) {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/wallet/unlimited_allowance`
+        };
+
+        requestParams.queryParameters = {
+          tokenAddress: params.tokenAddress,
+        };
+        return this.executeRequest<void>(requestParams);
       }
 
       public async getEthBalance() {

@@ -7,6 +7,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { tickerStore } from 'stores/ticker-store';
+import { ITokenStats } from './create-market';
 import './token-reserve-input.scss';
 
 interface ITokenReserveInputProps {
@@ -15,7 +16,7 @@ interface ITokenReserveInputProps {
     symbol: string;
   };
   onChange: (params?: ITokenReserveParams) => void;
-  balance: BigNumber;
+  stats: ITokenStats;
 }
 
 export interface ITokenReserveParams {
@@ -37,8 +38,8 @@ export class TokenReserveInput extends React.Component<ITokenReserveInputProps> 
           <span>{this.props.token.symbol} Parameters</span>
           <span className='balance-container'>
             <span className='uppercase balance-label'>Balance</span>
-            {toUnitAmount({ token: this.props.token, value: this.props.balance }).toFormat(4)}&nbsp;
-            (~{tickerStore.getTokenUsdEquivalent(this.props.token, this.props.balance)} USD)
+            {toUnitAmount({ token: this.props.token, value: this.props.stats.balance }).toFormat(4)}&nbsp;
+            (~{tickerStore.getTokenUsdEquivalent(this.props.token, this.props.stats.balance)} USD)
           </span>
         </label>
         <div className='fl sb'>
@@ -76,7 +77,7 @@ export class TokenReserveInput extends React.Component<ITokenReserveInputProps> 
     if (!formatValidation.valid) { return formatValidation; }
 
     const bn = toBaseUnitAmount({ token: this.props.token, value });
-    if (bn.isGreaterThan(this.props.balance)) {
+    if (bn.isGreaterThan(this.props.stats.balance)) {
       return { error: 'Insufficient balance' };
     }
 
