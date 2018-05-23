@@ -56,9 +56,7 @@ export class SoftCancellationWatcher {
     const highestBand = await this.bandService.getBottomBand({ side, marketId: market._id });
     if (!highestBand) {
       // there are no bands, we have to cancel this one
-      if (market.cancellationMode === 'soft') {
-        await this.orderService.softCancelOrder(order);
-      } else {
+      if (market.cancellationMode !== 'soft') {
         await this.orderService.cancelOrder(order);
       }
       return;
@@ -75,9 +73,7 @@ export class SoftCancellationWatcher {
 
     // gotta cancel it
     if (containment === 'loss-risk') {
-      if (market.cancellationMode === 'soft') {
-        await this.orderService.softCancelOrder(order);
-      } else {
+      if (market.cancellationMode !== 'soft') {
         await this.orderService.cancelOrder(order);
       }
     }
