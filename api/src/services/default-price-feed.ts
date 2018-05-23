@@ -57,8 +57,8 @@ export class DefaultPriceFeed extends PriceFeed {
     }
 
     let quote = quoteSymbol;
-    if (quote !== 'WETH' && quote !== 'USD') {
-      throw new ServerError('DefaultPriceFeed only supports WETH as a quote token', 400);
+    if (quote !== 'WETH' && quote !== 'DAI' && quote !== 'USD') {
+      throw new ServerError('DefaultPriceFeed only supports WETH and DAI as a quote token', 400);
     }
 
     if (quote === 'WETH') {
