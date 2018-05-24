@@ -1,10 +1,10 @@
 import { LoadingScreen } from 'common/loading-screen';
 import { getPath } from 'common/paths';
-import { observable } from 'mobx';
+import { autorun, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Redirect, Route, Switch, withRouter } from 'react-router';
-import * as request from 'superagent';
+import { IProcessedHealth, nodeHealthStore } from 'stores/node-health-store';
 import './app.scss';
 import { FlashMessage } from './flash-message/flash-message';
 import { Home } from './home/home';
@@ -13,41 +13,18 @@ import { NavBar } from './nav-bar/nav-bar';
 interface IAppProps {
 }
 
-interface IParityHealth {
-  jsonrpc: string;
-  result: {
-    peers: {
-      details: [number, number],
-      message: string;
-      status: string;
-    }
-    sync: {
-      details: boolean;
-      message: string;
-      status: 'ok' | 'needsAttention';
-    };
-    time: {
-      details: number;
-      message: string;
-      status: string;
-    };
-  };
-  id: number;
-}
-
 @withRouter
 @observer
 export class App extends React.Component<IAppProps> {
-  private interval: any;
-  @observable private health?: {
-    status: 'ready' | 'pending';
-    message: string;
-    peers: [number, number]
-  };
+  @observable private health?: IProcessedHealth;
 
   constructor(public readonly props: IAppProps) {
     super(props);
-    this.beginHealthPolling();
+    autorun(() => {
+      if (!this.health || this.health.status !== 'ready') {
+        this.health = nodeHealthStore.health;
+      }
+    });
   }
 
   public render() {
@@ -76,47 +53,5 @@ export class App extends React.Component<IAppProps> {
         </div>
       </div>
     );
-  }
-
-  private getHealthMessage(health: IParityHealth) {
-    if (health.result.peers.status !== 'ok') {
-      return health.result.peers.message;
-    }
-
-    if (health.result.sync.status !== 'ok') {
-      return health.result.sync.message;
-    }
-
-    return undefined;
-  }
-
-  private async beginHealthPolling() {
-    this.interval = setInterval(() => {
-      this.loadLogs();
-    }, 5000);
-    this.loadLogs();
-  }
-
-  private loadLogs() {
-    request('/health-logs/latest-health.json')
-      .end((_err, res) => {
-        const health: IParityHealth = res.body;
-
-        const message = this.getHealthMessage(health);
-        if (!message) {
-          this.health = {
-            message: 'ready',
-            peers: health.result.peers.details,
-            status: 'ready'
-          };
-          clearInterval(this.interval);
-        } else {
-          this.health = {
-            message,
-            peers: health.result.peers.details,
-            status: 'pending'
-          };
-        }
-      });
   }
 }

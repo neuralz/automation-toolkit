@@ -29,4 +29,26 @@
     color: #67cd67;
     cursor: pointer;
   }
+
+  .danger {
+    color: #e06278;
+  }
+
+  .fa.fa-exclamation-circle {
+    color: #d22323;
+    margin-right: .5rem;
+    line-height: 1;
+  }
+
+  .troubleshooting-list {
+    margin-top: 0;
+    margin-bottom: 0;
+    list-style: circle;  
+  }
+
+  .list-header {
+    font-size: 1.25rem;
+    margin-bottom: .25rem;
+  }
+  
 }

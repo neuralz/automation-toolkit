@@ -24,6 +24,7 @@ interface IParityHealth {
     };
   };
   id: number;
+  block: string;
 }
 
 export interface INodeHealth {
@@ -61,6 +62,12 @@ export class Web3Service {
   public async getParityNodeHealth(): Promise<INodeHealth> {
     try {
       const health = await this.executeRpcCommand<IParityHealth>('parity_nodeHealth');
+      try {
+        health.block = await this.getBlockNumber();
+      } catch (err) {
+        console.log(`failed to get block: ${health.block}`);
+      }
+
       if (!fs.existsSync('/health-logs')) { fs.mkdirSync('/health-logs'); }
       fs.writeFileSync('/health-logs/latest-health.json', JSON.stringify(health));
       if (health.result.peers.status !== 'ok'
@@ -118,6 +125,15 @@ export class Web3Service {
       this.web3.eth.getBalance(account, (err, balance) => {
         if (err) { return reject(err); }
         resolve(balance.toString());
+      });
+    });
+  }
+
+  private async getBlockNumber() {
+    return new Promise<string>((resolve, reject) => {
+      this.web3.eth.getBlockNumber((err, n) => {
+        if (err) { return reject(err); }
+        resolve(n.toString());
       });
     });
   }

@@ -37,7 +37,6 @@ services:
       - "8545"
     environment:
       - ETHEREUM_CHAIN
-      - SYNC_BLOCK
     volumes:
       - ./parity-data:/root/.local/share/io.parity.ethereum/
     entrypoint: /bin/bash
