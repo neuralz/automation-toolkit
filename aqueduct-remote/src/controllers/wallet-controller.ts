@@ -1,7 +1,8 @@
 import { Body, Get, Post, Query, Route, Tags } from 'tsoa';
 import { config } from '../config';
-import { IImportAccountRequest, ParityService } from '../services/parity-service';
-import { INodeHealth, IUnlockAccountParams, Web3Service } from '../services/web3-service';
+import { ServerError } from '../server-error';
+import { IConfigurationStatus, IImportAccountRequest, IUnlockAccountRequest, KeyService } from '../services/key-service';
+import { web3service } from '../services/web3-service';
 import { ZeroExService } from '../services/zero-ex-service';
 
 export interface INetwork {
@@ -14,20 +15,30 @@ export class WalletController {
   @Get('account')
   @Tags('Wallet')
   public async getAccount(): Promise<string> {
-    return await new Web3Service().getAccount();
+    const account = new KeyService().getAccount();
+    if (!account) {
+      throw new ServerError(`no account configured`);
+    }
+
+    return account;
   }
 
   @Post('import')
   @Tags('Wallet')
-  public async importAccount(@Body() request: IImportAccountRequest) {
-    return await new ParityService().importAccount(request);
+  public importAccount(@Body() request: IImportAccountRequest) {
+    new KeyService().importAccount(request);
   }
 
   @Post('unlock')
   @Tags('Wallet')
-  public async unlockAccount(@Body() request: IUnlockAccountParams) {
-    const account = await this.getAccount();
-    return await new ParityService().unlockAccount(account, request.passphrase);
+  public unlockAccount(@Body() request: IUnlockAccountRequest) {
+    new KeyService().unlockAccount(request);
+  }
+
+  @Get('configuration_status')
+  @Tags('Wallet')
+  public getConfigurationStatus(): IConfigurationStatus {
+    return new KeyService().getConfigurationStatus();
   }
 
   @Get('balance')
@@ -51,13 +62,7 @@ export class WalletController {
   @Get('eth_balance')
   @Tags('Wallet')
   public async getEthBalance(): Promise<string> {
-    return await new Web3Service().getEthBalance();
-  }
-
-  @Get('node_health')
-  @Tags('Wallet')
-  public async getNodeHealth(): Promise<INodeHealth> {
-    return await new Web3Service().getParityNodeHealth();
+    return await web3service.getEthBalance();
   }
 
   @Get('network')

@@ -35,7 +35,7 @@ export class MarketWatcher {
 
     const bands = await bandRepository.find({ marketId: market._id });
     for (let band of bands) {
-      this.bandService.start(band);
+      await this.bandService.start(band);
     }
   }
 
@@ -49,7 +49,11 @@ export class MarketWatcher {
       if (isProcessing) { return; }
 
       isProcessing = true;
-      await this.cycle(market);
+      try {
+        await this.cycle(market);
+      } catch (err) {
+        console.log(`error cycling market ${market._id}: ${err.message} ${err.stack}`);
+      }
       isProcessing = false;
     }, 10000);
   }

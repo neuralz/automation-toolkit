@@ -2,7 +2,8 @@ import { ZeroEx } from '0x.js';
 import { Transaction } from '@0xproject/types';
 import { config } from '../config';
 import { ServerError } from '../server-error';
-import { Web3Service } from './web3-service';
+import { KeyService } from './key-service';
+import { web3service } from './web3-service';
 
 export interface ICancelReceipt {
   gasCost: string;
@@ -11,7 +12,7 @@ export interface ICancelReceipt {
 
 export class ZeroExService {
   private readonly zeroEx: ZeroEx;
-  private readonly web3 = new Web3Service().getWeb3();
+  private readonly web3 = web3service.getWeb3();
 
   constructor() {
     this.zeroEx = new ZeroEx(this.web3.currentProvider, {
@@ -20,13 +21,13 @@ export class ZeroExService {
   }
 
   public async getTokenBalance(tokenAddress: string) {
-    const account = await new Web3Service().getAccount();
+    const account = new KeyService().getAccount();
     const balance = await this.zeroEx.token.getBalanceAsync(tokenAddress, account);
     return balance.toString();
   }
 
   public async getTokenAllowance(tokenAddress: string) {
-    const account = await new Web3Service().getAccount();
+    const account = new KeyService().getAccount();
     const allowance = await this.zeroEx.token.getProxyAllowanceAsync(tokenAddress, account);
     return allowance.toString();
   }
@@ -34,7 +35,7 @@ export class ZeroExService {
   public async setTokenAllowance(tokenAddress: string) {
     try {
       console.log(`setting allowance for ${tokenAddress}`);
-      const account = await new Web3Service().getAccount();
+      const account = new KeyService().getAccount();
       const txHash = await this.zeroEx.token.setUnlimitedProxyAllowanceAsync(tokenAddress, account);
       console.log(`set allowance @ ${txHash}`);
       await this.zeroEx.awaitTransactionMinedAsync(txHash);

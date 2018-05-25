@@ -29,7 +29,7 @@ Aqueduct.Initialize();
   await new PendingAqueductService().waitForAqueductRemote();
   const network = await new AqueductRemote.Api.WalletService().getNetwork();
   config.networkId = network.id;
-  config.chain = network.chain as 'kovan' | 'foundation';
+  config.chain = network.chain as 'kovan' | 'mainnet';
   new Worker().start();
 
   await tokenPairCache.getTokenPairs(config.networkId);

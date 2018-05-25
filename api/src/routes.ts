@@ -13,6 +13,17 @@ const models: TsoaRoute.Models = {
             "key": { "dataType": "string", "required": true },
         },
     },
+    "IUnlockAccountRequest": {
+        "properties": {
+            "passphrase": { "dataType": "string", "required": true },
+        },
+    },
+    "IConfigurationStatus": {
+        "properties": {
+            "unlocked": { "dataType": "boolean", "required": true },
+            "imported": { "dataType": "boolean", "required": true },
+        },
+    },
     "ITokenStats": {
         "properties": {
             "balance": { "dataType": "string", "required": true },
@@ -106,7 +117,6 @@ const models: TsoaRoute.Models = {
     "IStartMarketRequest": {
         "properties": {
             "marketId": { "dataType": "string", "required": true },
-            "passphrase": { "dataType": "string", "required": true },
         },
     },
     "IValidateStopResult": {
@@ -216,6 +226,43 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.importAccount.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.post('/api/accounts/unlock',
+        function(request: any, response: any, next: any) {
+            const args = {
+                request: { "in": "body", "name": "request", "required": true, "ref": "IUnlockAccountRequest" },
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new AccountsController();
+
+
+            const promise = controller.unlockAccount.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/accounts/configuration_status',
+        function(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new AccountsController();
+
+
+            const promise = controller.getConfigurationStatus.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/accounts/get_token_stats',

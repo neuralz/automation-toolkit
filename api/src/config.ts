@@ -13,7 +13,7 @@ export interface IConfig {
   networkId: number;
   priceFeed: PriceFeed;
   gasSetting: GasPriceSetting;
-  chain: 'kovan' | 'foundation';
+  chain: 'kovan' | 'mainnet';
 }
 
 export const config: IConfig = {

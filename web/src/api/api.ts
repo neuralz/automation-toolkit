@@ -18,6 +18,15 @@ export namespace Dashboard {
       key: string;
     }
 
+    export interface IUnlockAccountRequest {
+      passphrase: string;
+    }
+
+    export interface IConfigurationStatus {
+      unlocked: boolean;
+      imported: boolean;
+    }
+
     export interface ITokenStats {
       balance: string;
       allowance: string;
@@ -100,7 +109,6 @@ export namespace Dashboard {
 
     export interface IStartMarketRequest {
       marketId: string;
-      passphrase: string;
     }
 
     export interface IValidateStopResult {
@@ -168,6 +176,10 @@ export namespace Dashboard {
 
     export interface IAccountsImportAccountParams {
       request: IImportAccountRequest;
+    }
+
+    export interface IAccountsUnlockAccountParams {
+      request: IUnlockAccountRequest;
     }
 
     export interface IAccountsGetTokenStatsParams {
@@ -251,6 +263,24 @@ export namespace Dashboard {
 
         requestParams.body = params.request;
         return this.executeRequest<void>(requestParams);
+      }
+
+      public async unlockAccount(params: IAccountsUnlockAccountParams) {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/accounts/unlock`
+        };
+
+        requestParams.body = params.request;
+        return this.executeRequest<void>(requestParams);
+      }
+
+      public async getConfigurationStatus() {
+        const requestParams: IRequestParams = {
+          method: 'GET',
+          url: `${baseApiUrl}/api/accounts/configuration_status`
+        };
+        return this.executeRequest<IConfigurationStatus>(requestParams);
       }
 
       public async getTokenStats(params: IAccountsGetTokenStatsParams) {

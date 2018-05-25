@@ -9,7 +9,7 @@ interface IEnterPassphraseModalProps {
   message: string;
   submitText: String;
   onClose: () => void;
-  onSubmit: (passphrase: string) => void;
+  onSubmit: (passphrase: string) => Promise<void>;
 }
 
 @observer
@@ -34,9 +34,9 @@ export class EnterPassphraseModal extends React.Component<IEnterPassphraseModalP
 
   private readonly onPassphraseChange: React.ChangeEventHandler<HTMLInputElement> = event => this.passphrase = event.target.value;
 
-  private readonly onSubmit = () => {
+  private readonly onSubmit = async () => {
     if (this.passphrase) {
-      this.props.onSubmit(this.passphrase);
+      await this.props.onSubmit(this.passphrase);
       this.props.onClose();
     }
   }

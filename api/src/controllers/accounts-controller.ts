@@ -6,6 +6,10 @@ export interface IImportAccountRequest {
   key: string;
 }
 
+export interface IUnlockAccountRequest {
+  passphrase: string;
+}
+
 export interface ITokenStats {
   balance: string;
   allowance: string;
@@ -14,6 +18,11 @@ export interface ITokenStats {
 export interface ISetAllowanceRequest {
   passphrase: string;
   tokenAddress: string;
+}
+
+export interface IConfigurationStatus {
+  unlocked: boolean;
+  imported: boolean;
 }
 
 @Route('accounts')
@@ -28,6 +37,18 @@ export class AccountsController {
   @Tags('Accounts')
   public async importAccount(@Body() request: IImportAccountRequest) {
     await new AqueductRemote.Api.WalletService().importAccount({ request });
+  }
+
+  @Post('unlock')
+  @Tags('Accounts')
+  public async unlockAccount(@Body() request: IUnlockAccountRequest) {
+    await new AqueductRemote.Api.WalletService().unlockAccount({ request });
+  }
+
+  @Get('configuration_status')
+  @Tags('Accounts')
+  public async getConfigurationStatus(): Promise<IConfigurationStatus> {
+    return await new AqueductRemote.Api.WalletService().getConfigurationStatus();
   }
 
   @Get('get_token_stats')

@@ -202,7 +202,7 @@ export class BandService {
     try {
       price = await this.priceFeed.getPrice(baseTokenSymbol, quoteTokenSymbol);
     } catch (err) {
-      this.logService.addBandLog({ bandId: band._id, severity: 'critical', message: err.message });
+      await this.logService.addBandLog({ bandId: band._id, severity: 'critical', message: err.message });
       console.error(err.message);
       return;
     }

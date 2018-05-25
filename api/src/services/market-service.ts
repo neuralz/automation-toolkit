@@ -20,7 +20,6 @@ export interface IStopMarketRequest {
 
 export interface IStartMarketRequest {
   marketId: string;
-  passphrase: string;
 }
 
 export interface IValidateStopResult {
@@ -62,13 +61,11 @@ export class MarketService {
     return createdMarket;
   }
 
-  public async start({ marketId, passphrase }: IStartMarketRequest): Promise<IStoredMarket> {
+  public async start({ marketId }: IStartMarketRequest): Promise<IStoredMarket> {
     const market = await marketRepository.findOne({ _id: marketId });
     if (!market) {
       throw new ServerError(`market ${marketId} not found`, 404);
     }
-
-    await new AqueductRemote.Api.WalletService().unlockAccount({ request: { passphrase } });
 
     if (market.active) {
       throw new ServerError(`market ${marketId} already active`, 400);

@@ -1,9 +1,9 @@
 import { CancelOrder, LimitOrder, SoftCancelOrder } from 'aqueduct';
 import { BigNumber } from 'bignumber.js';
 import { Body, Post, Route, Tags } from 'tsoa';
-import { config } from '../config';
 import { ServerError } from '../server-error';
-import { Web3Service } from '../services/web3-service';
+import { KeyService } from '../services/key-service';
+import { web3service } from '../services/web3-service';
 import { ICancelReceipt, ZeroExService } from '../services/zero-ex-service';
 
 export interface ILimitOrderRequest {
@@ -51,7 +51,7 @@ export class TradingController {
   @Post('limit_order')
   @Tags('Trading')
   public async createLimitOrder(@Body() request: ILimitOrderRequest): Promise<IOrder> {
-    const account = await new Web3Service().getAccount();
+    const account = await new KeyService().getAccount();
     const {
       baseTokenSymbol, quoteTokenSymbol,
       price, quantityInWei, expirationDate, side
@@ -65,11 +65,11 @@ export class TradingController {
       account,
       baseTokenSymbol,
       quoteTokenSymbol,
-      nodeUrl: config.nodeUrl,
       price: new BigNumber(price),
       expirationDate,
       type: request.side as 'buy' | 'sell',
-      quantityInWei: new BigNumber(quantityInWei)
+      quantityInWei: new BigNumber(quantityInWei),
+      web3: web3service.getWeb3()
     }).execute();
 
     return order;
@@ -91,14 +91,14 @@ export class TradingController {
     }
 
     const txHash = await new CancelOrder({
-      nodeUrl: config.nodeUrl,
+      web3: web3service.getWeb3(),
       orderHash: request.orderHash,
       gasPrice
     }).execute();
 
     // immediately removes it from the book
     await new SoftCancelOrder({
-      nodeUrl: config.nodeUrl,
+      web3: web3service.getWeb3(),
       orderHash: request.orderHash
     }).execute();
 
@@ -110,7 +110,7 @@ export class TradingController {
   public async softCancelOrder(orderHash: string) {
     // immediately removes it from the book
     await new SoftCancelOrder({
-      nodeUrl: config.nodeUrl,
+      web3: web3service.getWeb3(),
       orderHash
     }).execute();
   }

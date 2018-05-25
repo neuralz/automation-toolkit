@@ -59,15 +59,15 @@ const models: TsoaRoute.Models = {
             "passphrase": { "dataType": "string", "required": true },
         },
     },
-    "IUnlockAccountParams": {
+    "IUnlockAccountRequest": {
         "properties": {
             "passphrase": { "dataType": "string", "required": true },
         },
     },
-    "INodeHealth": {
+    "IConfigurationStatus": {
         "properties": {
-            "success": { "dataType": "boolean" },
-            "error": { "dataType": "string" },
+            "unlocked": { "dataType": "boolean", "required": true },
+            "imported": { "dataType": "boolean", "required": true },
         },
     },
     "INetwork": {
@@ -195,7 +195,7 @@ export function RegisterRoutes(app: any) {
     app.post('/api/wallet/unlock',
         function(request: any, response: any, next: any) {
             const args = {
-                request: { "in": "body", "name": "request", "required": true, "ref": "IUnlockAccountParams" },
+                request: { "in": "body", "name": "request", "required": true, "ref": "IUnlockAccountRequest" },
             };
 
             let validatedArgs: any[] = [];
@@ -209,6 +209,24 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.unlockAccount.apply(controller, validatedArgs);
+            promiseHandler(controller, promise, response, next);
+        });
+    app.get('/api/wallet/configuration_status',
+        function(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new WalletController();
+
+
+            const promise = controller.getConfigurationStatus.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/wallet/balance',
@@ -284,24 +302,6 @@ export function RegisterRoutes(app: any) {
 
 
             const promise = controller.getEthBalance.apply(controller, validatedArgs);
-            promiseHandler(controller, promise, response, next);
-        });
-    app.get('/api/wallet/node_health',
-        function(request: any, response: any, next: any) {
-            const args = {
-            };
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = getValidatedArgs(args, request);
-            } catch (err) {
-                return next(err);
-            }
-
-            const controller = new WalletController();
-
-
-            const promise = controller.getNodeHealth.apply(controller, validatedArgs);
             promiseHandler(controller, promise, response, next);
         });
     app.get('/api/wallet/network',

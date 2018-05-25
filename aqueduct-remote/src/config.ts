@@ -3,12 +3,13 @@ if (!chain) {
   throw new Error(`ETHEREUM_CHAIN env var not set`);
 }
 
-if (chain !== 'foundation' && chain !== 'kovan') { throw new Error(`ETHEREUM_CHAIN must be 'foundation' or 'kovan'`); }
+if (chain !== 'mainnet' && chain !== 'kovan') { throw new Error(`ETHEREUM_CHAIN must be 'mainnet' or 'kovan'`); }
 
-const networkId = chain === 'foundation' ? 1 : 42;
+const networkId = chain === 'mainnet' ? 1 : 42;
+const nodeUrl = networkId === 1 ? 'https://mainnet.infura.io' : 'https://kovan.infura.io';
 
 export const config = {
-  nodeUrl: 'http://parity:8545',
+  nodeUrl,
   networkId,
   chain
 };

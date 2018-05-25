@@ -23,8 +23,7 @@ export class NoAccountModal extends React.Component<INoAccountsModalProps> {
     return (
       <Modal title='Wallet Setup' onClose={noOp}>
         <p className='h-padding'>
-          <strong>Note:</strong> your private key will only be used locally and will <strong>not</strong> be stored in plain text.
-          Your account information will be securely stored in a local, private Parity node.
+          Your private key will only be used locally and will be securely encrypted.
         </p>
         <Form onSubmit={this.onSubmit}>
           <TextInput type='password' label='Private Key' placeholder='Private Key' autoFocus={true}

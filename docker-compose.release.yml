@@ -10,7 +10,6 @@ services:
       - TOOLKIT_VERSION=$TOOLKIT_VERSION
     volumes:
       - ./web/dist:/app/dist
-      - ./health-logs:/app/dist/health-logs
   api:
     image: ercdex/mm-api:$HASH
     ports:
@@ -26,18 +25,5 @@ services:
       - "8700"
     environment:
       - ETHEREUM_CHAIN
-    links:
-      - parity
     volumes:
-      - ./health-logs:/health-logs
-  parity:
-    image: ercdex/mm-parity:$HASH
-    expose:
-      # DO NOT CHANGE! JSONRPC should not be exposed to the host, only to linked containers
-      - "8545"
-    environment:
-      - ETHEREUM_CHAIN
-    volumes:
-      - ./parity-data:/root/.local/share/io.parity.ethereum/
-    entrypoint: /bin/bash
-    command: ["/runtime-scripts/start.sh"]
+      - ./.keys:/app/keys

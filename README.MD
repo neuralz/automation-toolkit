@@ -5,12 +5,9 @@ The ERC dEX Automation Toolkit allows traders to create custom trading strategie
 # Installation
 
 ## System Requirements
-- The application uses `docker-compose` to run all services (local web dashboard, APIs, and a local Parity Ethereum node). Docker-compose can be installed on any MacOS, Windows, or Linux machine. Follow the instructions at https://docs.docker.com/compose/install to install docker-compose on your platform.
+- The application uses `docker-compose` to run all services (local web dashboard and APIs). Docker-compose can be installed on any MacOS, Windows, or Linux machine. Follow the instructions at https://docs.docker.com/compose/install to install docker-compose on your platform.
     - There are [known issues](https://github.com/docker/for-mac/issues/1374) when running on some versions of Docker for Mac. External network calls may fail after the application has been running for several hours. Restarting the Docker Daemon should return service.
 - `docker-compose` requires `docker`. For most use cases, choose Docker CE edition, not Docker EE.
-- Hardware
-    - You will want to run this application on a SSD (Solid State Drive). The underlying ethereum node may be slow on a mechanical drive.
-    - Allow significant disk space (current recommendation: 50 GB)
 
 ## Download
 - Run installation script
@@ -26,9 +23,8 @@ The ERC dEX Automation Toolkit allows traders to create custom trading strategie
 ## Starting the application
 
 - Start process
-  - mainnet: `sh run-mainnet.sh` or `sudo sh run-mainnet.sh`
-  - kovan (testnet): `sh run-kovan.sh` or `sudo sh run-kovan.sh`
-- Once the environment bootstrapping process is complete, visit http://localhost:8663 to view the dashboard
+  - `sh run.sh <mainnet or kovan>` or `sudo sh run.sh <mainnet or kovan>`
+- Visit http://localhost:8663 to view the dashboard
 
 ## Importing Ethereum Wallet
 
@@ -50,9 +46,7 @@ Automated trading for decentralized platforms presents unique challenges not see
 
 ## Signing Requirements
 
-Unlike centralized exchanges, which expose simple, centralized endpoints for order creation and cancelation, decentralized exchanges depend on off-chain signing and sending transactions to the Ethereum blockchain as the primary way to authorize actions. As a result, any decentralized trading system requires a local wallet implementation that supports signing.
-
-The toolkit includes a bundled, pre-configured version of [Parity](https://www.parity.io/), a robust, fully featured Ethereum client which supports signing. The toolkit requires that a wallet be unlocked, enabling 'headless' operation.
+Unlike centralized exchanges, which expose simple, centralized endpoints for order creation and cancelation, decentralized exchanges depend on off-chain signing and sending transactions to the Ethereum blockchain as the primary way to authorize actions. As a result, any decentralized trading system requires a local wallet implementation that supports signing. The toolkit includes a minimal light client, enabling 'headless' operation.
 
 ## Cancelation Gas Costs
 

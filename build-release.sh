@@ -13,8 +13,6 @@ docker build -t "ercdex/mm-aqueduct-remote:$1" ./aqueduct-remote
 docker push "ercdex/mm-aqueduct-remote:$1"
 docker build -t "ercdex/mm-web:$1" ./web
 docker push "ercdex/mm-web:$1"
-docker build -t "ercdex/mm-parity:$1" ./parity
-docker push "ercdex/mm-parity:$1"
 
 cp docker-compose.release.yml ./release
 mv ./release/docker-compose.release.yml ./release/docker-compose.yml
@@ -22,8 +20,7 @@ sed -i '' "s/\$HASH/$1/g" release/docker-compose.yml
 sed -i '' "s/\$TOOLKIT_VERSION/$1/g" release/docker-compose.yml
 
 cp README.MD ./release
-cp run-kovan.sh ./release
-cp run-mainnet.sh ./release
+cp run.sh ./release
 cp check-path.sh ./release
 cp update.sh ./release
 zip -r "release.zip" ./release

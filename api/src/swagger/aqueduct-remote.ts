@@ -63,13 +63,13 @@ export namespace AqueductRemote {
       passphrase: string;
     }
 
-    export interface IUnlockAccountParams {
+    export interface IUnlockAccountRequest {
       passphrase: string;
     }
 
-    export interface INodeHealth {
-      success?: boolean;
-      error?: string;
+    export interface IConfigurationStatus {
+      unlocked: boolean;
+      imported: boolean;
     }
 
     export interface INetwork {
@@ -99,7 +99,7 @@ export namespace AqueductRemote {
     }
 
     export interface IWalletUnlockAccountParams {
-      request: IUnlockAccountParams;
+      request: IUnlockAccountRequest;
     }
 
     export interface IWalletGetBalanceParams {
@@ -161,12 +161,12 @@ export namespace AqueductRemote {
     export interface IWalletService {
       getAccount(): Promise<string>;
       importAccount(params: IWalletImportAccountParams): Promise<void>;
-      unlockAccount(params: IWalletUnlockAccountParams): Promise<any>;
+      unlockAccount(params: IWalletUnlockAccountParams): Promise<void>;
+      getConfigurationStatus(): Promise<IConfigurationStatus>;
       getBalance(params: IWalletGetBalanceParams): Promise<string>;
       getAllowance(params: IWalletGetAllowanceParams): Promise<string>;
       setUnlimitedAllowance(params: IWalletSetUnlimitedAllowanceParams): Promise<void>;
       getEthBalance(): Promise<string>;
-      getNodeHealth(): Promise<INodeHealth>;
       getNetwork(): Promise<INetwork>;
     }
 
@@ -197,7 +197,15 @@ export namespace AqueductRemote {
         };
 
         requestParams.body = params.request;
-        return this.executeRequest<any>(requestParams);
+        return this.executeRequest<void>(requestParams);
+      }
+
+      public async getConfigurationStatus() {
+        const requestParams: IRequestParams = {
+          method: 'GET',
+          url: `${baseApiUrl}/api/wallet/configuration_status`
+        };
+        return this.executeRequest<IConfigurationStatus>(requestParams);
       }
 
       public async getBalance(params: IWalletGetBalanceParams) {
@@ -242,14 +250,6 @@ export namespace AqueductRemote {
           url: `${baseApiUrl}/api/wallet/eth_balance`
         };
         return this.executeRequest<string>(requestParams);
-      }
-
-      public async getNodeHealth() {
-        const requestParams: IRequestParams = {
-          method: 'GET',
-          url: `${baseApiUrl}/api/wallet/node_health`
-        };
-        return this.executeRequest<INodeHealth>(requestParams);
       }
 
       public async getNetwork() {

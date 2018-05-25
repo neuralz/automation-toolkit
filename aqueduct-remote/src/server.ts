@@ -9,15 +9,12 @@ const webSocket = require('html5-websocket');
 import './controllers/trading-controller';
 import './controllers/wallet-controller';
 import { RegisterRoutes } from './routes';
-import { waitForParity } from './wait-for-parity';
 
 (global as any).WebSocket = webSocket;
 
 Aqueduct.Initialize();
 
 (async () => {
-  await waitForParity();
-
   const app = express();
   const server = http.createServer(app);
   app.use(bodyParser.urlencoded({ extended: true }));

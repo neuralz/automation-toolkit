@@ -3,11 +3,18 @@ import { observable } from 'mobx';
 
 export class AccountStore {
   @observable public account?: string;
+  @observable public status?: Dashboard.Api.IConfigurationStatus;
 
   public async initialize() {
     try {
       this.account = await new Dashboard.Api.AccountsService().getAccount();
-    } catch { return; }
+      // tslint:disable-next-line:no-empty
+    } catch { }
+
+    try {
+      this.status = await new Dashboard.Api.AccountsService().getConfigurationStatus();
+      // tslint:disable-next-line:no-empty
+    } catch { }
   }
 }
 
