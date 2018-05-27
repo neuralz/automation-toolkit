@@ -1,4 +1,5 @@
 {
+  "name": "@ercdex/market-maker-api",
   "license": "MIT",
   "scripts": {
     "cli": "ts-node src/cli/cli.ts",

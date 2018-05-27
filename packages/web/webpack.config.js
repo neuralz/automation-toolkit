@@ -9,7 +9,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
   entry: {
-    'index': `${srcPath}/index.tsx`
+    'index': `${srcPath}/index.tsx`,
+    'about': `${srcPath}/about.tsx`
   },
   output: {
     path: distPath,
@@ -83,7 +84,14 @@ const config = {
     ]),
     new HtmlWebpackPlugin({
       title: 'Market Maker Dashboard | ERC dEX',
-      template: 'src/index.ejs'
+      template: 'src/index.ejs',
+      chunks: ['index']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'about.html',
+      title: 'About ERC DEX Automation Toolkit',
+      template: 'src/about.ejs',
+      chunks: ['about']
     }),
     new ExtractTextPlugin({
       filename: '[name].[hash].css'

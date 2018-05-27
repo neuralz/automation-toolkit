@@ -1,4 +1,5 @@
 {
+  "name": "@ercdex/aqueduct-remote",
   "license": "MIT",
   "scripts": {
     "cli": "ts-node src/cli/cli.ts",

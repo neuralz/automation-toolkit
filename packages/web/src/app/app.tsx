@@ -4,7 +4,6 @@ import { Redirect, Route, Switch, withRouter } from 'react-router';
 import './app.scss';
 import { FlashMessage } from './flash-message/flash-message';
 import { Home } from './home/home';
-import { NavBar } from './nav-bar/nav-bar';
 
 interface IAppProps {
 }
@@ -14,7 +13,6 @@ export class App extends React.Component<IAppProps> {
   public render() {
     return (
       <div className='app fl co'>
-        <NavBar />
         <FlashMessage />
         <div className='app-content'>
           <Switch>
