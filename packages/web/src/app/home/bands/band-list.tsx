@@ -87,8 +87,8 @@ export class BandList extends React.Component<IBandListProps> {
 
           return (
             <div className='fl fe r-padding fw'>
-              <img className='band-logs' title='Logs' src='/images/bandLogs.svg' onClick={onViewLogs} />
-              <img className='band-remove' title='Remove' src='/images/bandRemove.svg' onClick={onRemoveBand} />
+              <img className='band-logs' title='Logs' src='images/bandLogs.svg' onClick={onViewLogs} />
+              <img className='band-remove' title='Remove' src='images/bandRemove.svg' onClick={onRemoveBand} />
             </div>
           );
         },

@@ -15,7 +15,7 @@ ReactDOM.render((
   <div className='container'>
     <div>
       <div className='icon-container'>
-        <img src='./images/logo.png' />
+        <img src='images/logo.png' />
       </div>
       <div className='name'>
         ERC dEX Automation Toolkit v{getParameterByName('version')}

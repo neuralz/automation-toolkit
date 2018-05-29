@@ -1,5 +1,4 @@
-import { CancelOrder, LimitOrder, SoftCancelOrder } from 'aqueduct';
-import { BigNumber } from 'bignumber.js';
+import { CancelOrder, LimitOrder, SoftCancelOrder } from '@ercdex/aqueduct';
 import { Body, Post, Route, Tags } from 'tsoa';
 import { ServerError } from '../server-error';
 import { KeyService } from '../services/key-service';
@@ -51,7 +50,8 @@ export class TradingController {
   @Post('limit_order')
   @Tags('Trading')
   public async createLimitOrder(@Body() request: ILimitOrderRequest): Promise<IOrder> {
-    const account = await new KeyService().getAccount();
+    try {
+      const account = await new KeyService().getAccount();
     const {
       baseTokenSymbol, quoteTokenSymbol,
       price, quantityInWei, expirationDate, side
@@ -65,35 +65,27 @@ export class TradingController {
       account,
       baseTokenSymbol,
       quoteTokenSymbol,
-      price: new BigNumber(price),
+      price,
       expirationDate,
       type: request.side as 'buy' | 'sell',
-      quantityInWei: new BigNumber(quantityInWei),
+      quantityInWei,
       web3: web3service.getWeb3()
     }).execute();
 
     return order;
+    } catch (err) {
+      console.log(err, err.stack);
+      throw err;
+    }
   }
 
   @Post('cancel_order')
   @Tags('Trading')
   public async cancelOrder(@Body() request: ICancelOrderRequest): Promise<string> {
-    let gasPrice: BigNumber | undefined = undefined;
-    if (request.gasPrice) {
-      try {
-        gasPrice = new BigNumber(request.gasPrice);
-        if (!gasPrice.isInteger()) {
-          throw new ServerError(`gasPrice should be an integer`, 400);
-        }
-      } catch {
-        throw new ServerError(`gasPrice should be an integer`, 400);
-      }
-    }
-
     const txHash = await new CancelOrder({
       web3: web3service.getWeb3(),
       orderHash: request.orderHash,
-      gasPrice
+      gasPrice: request.gasPrice
     }).execute();
 
     // immediately removes it from the book

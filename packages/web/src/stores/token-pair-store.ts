@@ -1,7 +1,8 @@
 import { Dashboard } from 'api/api';
+import { observable } from 'mobx';
 
 export class TokenPairStore {
-  public tokenPairs: Dashboard.Api.ITokenPair[];
+  @observable public tokenPairs: Dashboard.Api.ITokenPair[];
 
   public async initialize() {
     this.tokenPairs = await new Dashboard.Api.TokenPairsService().get();

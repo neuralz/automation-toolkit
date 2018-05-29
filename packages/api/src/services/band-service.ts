@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 import { BigNumber } from 'bignumber.js';
 import * as moment from 'moment';
 import { ITokenPairCache, tokenPairCache } from '../cache/token-pair-cache';

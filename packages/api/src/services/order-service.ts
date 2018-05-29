@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 import { IStoredOrder, orderRepository, State } from '../db/order-repository';
 import { AqueductRemote } from '../swagger/aqueduct-remote';
 import { GasService } from './gas-service';

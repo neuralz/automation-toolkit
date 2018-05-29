@@ -13,7 +13,7 @@ interface ISelectMarketProps {
   history?: History;
 }
 
-@withRouter
+@(withRouter as any)
 @observer
 export class SelectMarket extends React.Component<ISelectMarketProps> {
   @observable private isCreatingMarket = false;
@@ -32,7 +32,7 @@ export class SelectMarket extends React.Component<ISelectMarketProps> {
         <div className='header fl sb vc'>
           Markets
           <div className='oval add-icon' onClick={this.onClickCreate}>
-            <img src='/images/add.svg' alt='Create New Market' title='Create New Market' />
+            <img src='images/add.svg' alt='Create New Market' title='Create New Market' />
           </div>
         </div>
         <div className='market-list grow'>

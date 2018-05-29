@@ -9,6 +9,6 @@ interface IInlineLoaderProps {
 
 export const InlineLoader = (props: IInlineLoaderProps) => (
   <span className={`${props.onClick ? 'clickable' : ''} ${props.className || ''}`} style={props.style} onClick={props.onClick}>
-    <img src='/images/three-dots.svg' alt='Loading' style={props.imgStyle || { height: '10px' }} />
+    <img src='images/three-dots.svg' alt='Loading' style={props.imgStyle || { height: '10px' }} />
   </span>
 );

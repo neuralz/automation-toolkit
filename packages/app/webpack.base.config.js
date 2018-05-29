@@ -1,6 +1,5 @@
-'use strict';
-
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   output: {
@@ -15,5 +14,12 @@ module.exports = {
     extensions: ['.ts', '.js', '.json']
   },
   devtool: 'source-map',
-  plugins: []
+  plugins: [],
+  externals: [
+    nodeExternals(),
+    nodeExternals({
+      modulesDir: path.resolve(__dirname, '../../node_modules'),
+      whitelist: ['aqueduct']
+    })
+  ]
 };

@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as http from 'http';
@@ -10,11 +10,11 @@ import './controllers/trading-controller';
 import './controllers/wallet-controller';
 import { RegisterRoutes } from './routes';
 
-(global as any).WebSocket = webSocket;
+export const startAqueductServer = async () => {
+  (global as any).WebSocket = webSocket;
 
-Aqueduct.Initialize();
+  Aqueduct.Initialize();
 
-(async () => {
   const app = express();
   const server = http.createServer(app);
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,10 +51,10 @@ Aqueduct.Initialize();
   });
 
   const port = 8700;
-  server.listen(port, 'aqueduct-remote', (err: Error) => {
+  server.listen(port, '0.0.0.0', (err: Error) => {
     if (err) {
       return console.log(err);
     }
-    console.log(`Listening on aqueduct-remote:${port}`);
+    console.log(`Listening on 0.0.0.0:${port}`);
   });
-})();
+};

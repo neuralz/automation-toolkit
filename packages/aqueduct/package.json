@@ -1,0 +1,57 @@
+{
+  "name": "@ercdex/aqueduct",
+  "version": "1.2.4",
+  "description": "Aqueduct: API and Socket client for ERC dEX",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ERCdEX/aqueduct.git"
+  },
+  "author": "ERC dEX",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "yarn build",
+    "prepublish": "npm run build:lib",
+    "deploy": "npm version patch -m \"Release v%s\" && npm publish",
+    "postversion": "git push origin master && git push --follow-tags",
+    "build": "tsc",
+    "start": "tsc -w",
+    "build:lib": "rimraf dist && npm run generate:client && npm run build",
+    "build:lib:fresh": "npm run fetch:swagger && npm run fetch:events && npm run build:lib",
+    "start:docs": "npm run generate:docs && cd docs && npm start",
+    "build:docs": "npm run generate:docs && cd docs && npm run build:prod",
+    "generate:client": "ts-node ./generate-client.ts --baseApiUrl=https://localhost:8443",
+    "generate:docs": "npm run build:lib && rimraf ./docs/src/client && typedoc --ignoreCompilerErrors --excludeExternals --excludePrivate --excludeProtected --theme themes/custom --readme none --name \"Aqueduct JavaScript Client\" --mode modules --out ./docs/src/client ./src/generated/aqueduct.ts",
+    "fetch:swagger": "ts-node ./fetch-swagger --baseApiUrl=https://localhost:8443",
+    "fetch:events": "ts-node ./events/fetch-events --baseApiUrl=https://localhost:8443",
+    "script:create:order": "ts-node ./src/examples/creating-an-order.ts",
+    "script:fill:order": "ts-node ./src/examples/filling-an-order.ts",
+    "script:websocket": "ts-node ./src/examples/websocket-subscription.ts",
+    "ts-node": "ts-node"
+  },
+  "dependencies": {
+    "0x.js": "0.36.0",
+    "@0xproject/typescript-typings": "0.2.0",
+    "bignumber.js": "4.1.0",
+    "moment": "^2.19.1",
+    "reconnecting-websocket": "^3.2.2",
+    "superagent": "^3.7.0",
+    "web3": "0.20.0"
+  },
+  "devDependencies": {
+    "@types/handlebars": "^4.0.36",
+    "@types/superagent": "^3.5.6",
+    "@types/ws": "^4.0.0",
+    "@types/yargs": "^8.0.2",
+    "handlebars": "^4.0.11",
+    "json-schema-to-typescript": "^4.6.5",
+    "rimraf": "^2.6.2",
+    "ts-node": "^6.0.5",
+    "tslint": "^5.8.0",
+    "typedoc": "^0.10.0",
+    "typescript": "^2.8.3",
+    "ws": "^4.0.0",
+    "yargs": "^9.0.1"
+  }
+}

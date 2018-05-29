@@ -1,12 +1,11 @@
 {
   "name": "@ercdex/market-maker-ui",
   "description": "Market Maker Dashboard",
-  "main": "index.js",
+  "version": "2.0.0",
   "author": "ERC dEX",
   "license": "MIT",
   "scripts": {
-    "start": "webpack --watch --config=webpack.config.js",
-    "build": "webpack --config=./webpack.config.js --mode=development",
+    "build:web": "webpack --config=./webpack.config.js --mode=development",
     "generate:client": "ts-node ./src/swagger/generate-client.ts --baseApiUrl=http://localhost:8662 --outputPath api/api.ts --namespace Dashboard"
   },
   "dependencies": {
@@ -17,7 +16,7 @@
     "@types/react": "^16.0.7",
     "@types/react-dom": "^16.0.2",
     "@types/react-router": "^4.0.15",
-    "@types/react-router-dom": "^4.0.7",
+    "@types/react-router-dom": "^4.2.6",
     "@types/superagent": "^3.5.7",
     "@types/yargs": "^11.0.0",
     "bignumber.js": "^6.0.0",

@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 // tslint:disable-next-line
@@ -20,12 +20,12 @@ import { PendingAqueductService } from './services/pending-aqueduct-service';
 import { AqueductRemote } from './swagger/aqueduct-remote';
 import { Worker } from './worker/worker';
 
-(global as any).WebSocket = webSocket;
+export const startServer = async () => {
+  (global as any).WebSocket = webSocket;
 
-AqueductRemote.Initialize({ host: 'aqueduct-remote:8700' });
-Aqueduct.Initialize();
+  AqueductRemote.Initialize({ host: 'localhost:8700' });
+  Aqueduct.Initialize();
 
-(async () => {
   await new PendingAqueductService().waitForAqueductRemote();
   const network = await new AqueductRemote.Api.WalletService().getNetwork();
   config.networkId = network.id;
@@ -89,4 +89,4 @@ Aqueduct.Initialize();
   process.on('unhandledRejection', err => {
     console.log(err);
   });
-})();
+};

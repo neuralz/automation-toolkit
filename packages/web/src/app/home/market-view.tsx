@@ -70,7 +70,7 @@ export class MarketView extends React.Component<IMarketViewProps> {
             <div className='fl v-padding'>
               <h1>{this.market.label}</h1>
               <div className={`control start fl vc ${!this.isStarted ? 'active' : 'inactive'}`} onClick={this.onStart(this.market)}>
-                <img src='/images/start.svg' />
+                <img src='images/start.svg' />
                 <span>Start</span>
               </div>
               <div className={`control stop fl vc ${this.isStarted ? 'active' : 'inactive'}`} onClick={this.onStop(this.market)}>
@@ -78,21 +78,21 @@ export class MarketView extends React.Component<IMarketViewProps> {
                 <span>Stop</span>
               </div>
               <div className={`control fl vc`} onClick={this.onViewHistory}>
-                <img src='/images/toolsHistory.svg' />
+                <img src='images/toolsHistory.svg' />
                 <span>History</span>
               </div>
               <div className={`control logs fl vc`} onClick={this.onViewLogs}>
-                <img src='/images/toolLogs.svg' />
+                <img src='images/toolLogs.svg' />
                 <span>Logs</span>
               </div>
               <div className={`control reports fl vc`} onClick={this.onViewReports}>
-                <img src='/images/reports.svg' />
+                <img src='images/reports.svg' />
                 <span>Reports</span>
               </div>
             </div>
             <div className='separator' />
             <a className='to-market control fl vc' href={this.marketUrl} target='_blank'>
-              <img src='/images/toolPopout.svg' />
+              <img src='images/toolPopout.svg' />
               <span>Live Market</span>
             </a>
           </div>
@@ -103,7 +103,7 @@ export class MarketView extends React.Component<IMarketViewProps> {
             <div className={`fl vc ${this.isStarted ? 'inactive' : 'active'}`} onClick={this.onDelete(this.market)}
               title={this.isStarted ? 'Market is currently running - stop first to delete' : undefined}>
               <div className='oval delete-market'>
-                <img src='/images/toolDelete.svg' alt='Delete Market' />
+                <img src='images/toolDelete.svg' alt='Delete Market' />
               </div>
             </div>
           </div>

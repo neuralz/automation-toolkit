@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 
 export interface ITokenTicker {
   id: string;
@@ -14,7 +14,7 @@ export interface ITokenTicker {
 }
 
 export class TickerDataCache {
-  public tickers: ITokenTicker[];
+  public tickers: ITokenTicker[] | undefined;
 
   public async initialize() {
     this.tickers = await new Aqueduct.Api.ReportsService().getTickerData();

@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 
 export interface ITokenPairCache {
   getTokenPairs(networkId: number): Promise<Aqueduct.Api.ITokenPair[]>;

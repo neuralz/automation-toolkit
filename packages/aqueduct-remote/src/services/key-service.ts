@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { ServerError } from '../server-error';
 // tslint:disable-next-line
 const wallet: IEthereumJsWallet = require('ethereumjs-wallet');
@@ -56,7 +57,7 @@ export interface IConfigurationStatus {
   imported: boolean;
 }
 
-const keyFilePath = `/app/keys/store.json`;
+const keyFilePath = path.join(__dirname, 'store.json');
 let instance: IWalletInstance | undefined = undefined;
 
 export class KeyService {

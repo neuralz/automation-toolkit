@@ -1,4 +1,4 @@
-import { Aqueduct } from 'aqueduct';
+import { Aqueduct } from '@ercdex/aqueduct';
 import { BigNumber } from 'bignumber.js';
 import { expect } from 'chai';
 import { IStoredBand } from '../../db/band-repository';

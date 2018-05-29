@@ -27,22 +27,22 @@ export interface IRepository<T, S extends StoredModel<T>> {
 }
 
 export abstract class Repository<T, S extends StoredModel<T>> implements IRepository<T, S> {
-  private datastore: Datastore;
+  private datastore: Datastore | undefined;
 
   public async create(data: T) {
-    await this.initialize();
+    const datastore = await this.initialize();
     return new Promise<S>((resolve, reject) => {
-      this.datastore.insert(data, (err, doc: S) => {
+      datastore.insert<T>(data, (err, doc) => {
         if (err) { return reject(err); }
-        resolve(doc);
+        resolve(doc as S);
       });
     });
   }
 
   public async find(data: Partial<S>, options?: IFindOptions<T>) {
-    await this.initialize();
+    const datastore = await this.initialize();
     return new Promise<S[]>((resolve, reject) => {
-      let cursor = this.datastore.find(data);
+      let cursor = datastore.find<S>(data);
       if (options) {
         if (options.sort) {
           const sortParams: any = {};
@@ -59,7 +59,7 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
         }
       }
 
-      cursor.exec((err: Error, doc: S[]) => {
+      cursor.exec((err, doc) => {
         if (err) { return reject(err); }
         resolve(doc);
       });
@@ -67,9 +67,9 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
   }
 
   public async findOne(data: Partial<S>) {
-    await this.initialize();
+    const datastore = await this.initialize();
     return new Promise<S | undefined>((resolve, reject) => {
-      this.datastore.findOne(data, (err: Error, doc: S) => {
+      datastore.findOne(data, (err: Error, doc: S) => {
         if (err) { return reject(err); }
         resolve(doc ? doc : undefined);
       });
@@ -77,9 +77,9 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
   }
 
   public async update(query: Partial<S>, data: T) {
-    await this.initialize();
+    const datastore = await this.initialize();
     return new Promise<number>((resolve, reject) => {
-      this.datastore.update(query, data, {}, (err: Error, numReplaced) => {
+      datastore.update(query, data, {}, (err: Error, numReplaced) => {
         if (err) { return reject(err); }
         resolve(numReplaced);
       });
@@ -87,9 +87,9 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
   }
 
   public async count(query: Partial<T>) {
-    await this.initialize();
+    const datastore = await this.initialize();
     return new Promise<number>((resolve, reject) => {
-      this.datastore.count(query, (err: Error, count: number) => {
+      datastore.count(query, (err: Error, count: number) => {
         if (err) { return reject(err); }
         resolve(count);
       });
@@ -97,9 +97,9 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
   }
 
   public async delete(query: Partial<S>) {
-    await this.initialize();
+    const datastore = await this.initialize();
     return new Promise<number>((resolve, reject) => {
-      this.datastore.remove(query, (err: Error, numDeleted) => {
+      datastore.remove(query, (err: Error, numDeleted) => {
         if (err) { return reject(err); }
         resolve(numDeleted);
       });
@@ -107,7 +107,7 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
   }
 
   private async initialize() {
-    if (this.datastore) { return; }
+    if (this.datastore) { return this.datastore; }
 
     let directory: string;
     if (process.env.NODE_ENV === 'test') {
@@ -123,5 +123,6 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
       filename: `./${directory}/${this.constructor.name.toLowerCase().replace('repository', '')}.db`,
       autoload: true
     });
+    return this.datastore;
   }
 }
