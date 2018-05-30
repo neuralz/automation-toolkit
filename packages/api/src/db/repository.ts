@@ -116,11 +116,11 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
       while (!config.chain) {
         await sleep(1000);
       }
-      directory = `data/${config.chain}`;
+      directory = `${config.pwd}/data/${config.chain}`;
     }
 
     this.datastore = new Datastore({
-      filename: `./${directory}/${this.constructor.name.toLowerCase().replace('repository', '')}.db`,
+      filename: `${directory}/${this.constructor.name.toLowerCase().replace('repository', '')}.db`,
       autoload: true
     });
     return this.datastore;

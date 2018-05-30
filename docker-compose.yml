@@ -1,14 +1,5 @@
 version: '3'
 services:
-  web:
-    build: ./web
-    ports:
-      - "8663:8663"
-    links:
-      - api
-    volumes:
-      - ./web/src:/app/src
-      - ./web/dist:/app/dist
   api:
     build: ./api
     ports:
@@ -29,4 +20,3 @@ services:
     volumes:
       - ./aqueduct-remote/dist:/app/dist
       - ./aqueduct-remote/src:/app/src
-      - ./.keys:/app/keys

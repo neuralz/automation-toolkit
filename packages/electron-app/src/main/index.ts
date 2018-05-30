@@ -5,10 +5,27 @@ import * as path from 'path';
 import * as url from 'url';
 import { openAboutWindow } from './windows/about';
 
+/**
+ * There is a bug with either yarn, lerna, electron-builder, electron-webpack, or some other
+ * piece of this <REDACTED> that packages in the wrong version of a package called mime. Luckily, this
+ * is JavaScript so I can just reshape packages with impunity
+ */
+// tslint:disable-next-line
+const mime: any = require('mime');
+mime.charsets = {
+  lookup: (mimeType: any, fallback: any) => {
+    // Assume text types are utf8
+    return (/^text\/|^application\/(javascript|json)/).test(mimeType) ? 'UTF-8' : fallback;
+  }
+};
+
+declare const __static: string;
+
 let win: BrowserWindow | undefined;
 
-startAqueductServer();
-startServer();
+// tslint:disable-next-line:no-console
+startAqueductServer(app.getPath('userData'));
+startServer(app.getPath('userData'));
 
 const createWindow = async () => {
   win = new BrowserWindow();
@@ -49,6 +66,8 @@ const createWindow = async () => {
     {
       label: 'Help',
       submenu: [
+        { role: 'toggledevtools' },
+        { type: 'separator' },
         {
           label: 'Documentation',
           click: () => {
@@ -71,22 +90,13 @@ const createWindow = async () => {
   const menu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(menu);
 
-  // if (process.env.NODE_ENV !== 'production') {
-  //   win.loadURL(`http://localhost:8663`);
-  // } else {
   win.loadURL(
     url.format({
-      pathname: path.join(__dirname, 'web', 'index.html'),
+      pathname: path.join(__static, 'index.html'),
       protocol: 'file:',
       slashes: true
     })
   );
-  // }
-
-  if (process.env.NODE_ENV !== 'production') {
-    // Open DevTools
-    win.webContents.openDevTools();
-  }
 
   win.on('closed', () => {
     win = undefined;

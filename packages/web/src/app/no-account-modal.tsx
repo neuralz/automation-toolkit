@@ -18,10 +18,8 @@ export class NoAccountModal extends React.Component<INoAccountsModalProps> {
   @observable private confirmPassphrase = '';
 
   public render() {
-    const noOp = () => undefined;
-
     return (
-      <Modal title='Wallet Setup' onClose={noOp}>
+      <Modal title='Wallet Setup'>
         <p className='h-padding'>
           Your private key will only be used locally and will be securely encrypted.
         </p>

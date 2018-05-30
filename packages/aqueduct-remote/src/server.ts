@@ -3,14 +3,15 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as http from 'http';
 import * as methodOverride from 'method-override';
-import 'reflect-metadata';
 // tslint:disable-next-line
 const webSocket = require('html5-websocket');
+import { config } from './config';
 import './controllers/trading-controller';
 import './controllers/wallet-controller';
 import { RegisterRoutes } from './routes';
 
-export const startAqueductServer = async () => {
+export const startAqueductServer = async (pwd: string) => {
+  config.pwd = pwd;
   (global as any).WebSocket = webSocket;
 
   Aqueduct.Initialize();

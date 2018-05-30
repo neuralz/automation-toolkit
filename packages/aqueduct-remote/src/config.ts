@@ -6,5 +6,6 @@ const nodeUrl = 'https://kovan.infura.io';
 export const config = {
   nodeUrl,
   networkId,
-  chain
+  chain,
+  pwd: ''
 };

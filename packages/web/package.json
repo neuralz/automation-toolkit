@@ -5,7 +5,8 @@
   "author": "ERC dEX",
   "license": "MIT",
   "scripts": {
-    "build:web": "webpack --config=./webpack.config.js --mode=development",
+    "build:web": "webpack --mode=development",
+    "start": "webpack --watch --mode=development",
     "generate:client": "ts-node ./src/swagger/generate-client.ts --baseApiUrl=http://localhost:8662 --outputPath api/api.ts --namespace Dashboard"
   },
   "dependencies": {

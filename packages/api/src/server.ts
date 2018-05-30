@@ -5,7 +5,6 @@ import * as express from 'express';
 const webSocket = require('html5-websocket');
 import * as http from 'http';
 import * as methodOverride from 'method-override';
-import 'reflect-metadata';
 import { tickerDataCache } from './cache/ticker-data-cache';
 import { tokenPairCache } from './cache/token-pair-cache';
 import { config } from './config';
@@ -20,7 +19,7 @@ import { PendingAqueductService } from './services/pending-aqueduct-service';
 import { AqueductRemote } from './swagger/aqueduct-remote';
 import { Worker } from './worker/worker';
 
-export const startServer = async () => {
+export const startServer = async (pwd: string) => {
   (global as any).WebSocket = webSocket;
 
   AqueductRemote.Initialize({ host: 'localhost:8700' });
@@ -29,6 +28,7 @@ export const startServer = async () => {
   await new PendingAqueductService().waitForAqueductRemote();
   const network = await new AqueductRemote.Api.WalletService().getNetwork();
   config.networkId = network.id;
+  config.pwd = pwd;
   config.chain = network.chain as 'kovan' | 'mainnet';
   new Worker().start();
 

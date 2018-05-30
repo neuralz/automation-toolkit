@@ -14,11 +14,13 @@ export interface IConfig {
   priceFeed: PriceFeed;
   gasSetting: GasPriceSetting;
   chain: 'kovan' | 'mainnet';
+  pwd: string;
 }
 
 export const config: IConfig = {
   networkId: undefined as any,
   chain: undefined as any,
   priceFeed: new DefaultPriceFeed(),
-  gasSetting: gasPrice || 'standard'
+  gasSetting: gasPrice || 'standard',
+  pwd: undefined as any
 };

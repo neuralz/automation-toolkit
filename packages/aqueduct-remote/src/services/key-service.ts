@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { config } from '../config';
 import { ServerError } from '../server-error';
 // tslint:disable-next-line
 const wallet: IEthereumJsWallet = require('ethereumjs-wallet');
@@ -57,7 +58,6 @@ export interface IConfigurationStatus {
   imported: boolean;
 }
 
-const keyFilePath = path.join(__dirname, 'store.json');
 let instance: IWalletInstance | undefined = undefined;
 
 export class KeyService {
@@ -74,7 +74,7 @@ export class KeyService {
     instance = wallet.fromPrivateKey(Buffer.from(key, 'hex'));
     const v3 = instance.toV3(passphrase);
 
-    fs.writeFileSync(keyFilePath, JSON.stringify(v3));
+    fs.writeFileSync(this.keyFilePath, JSON.stringify(v3));
 
     this.unlockAccount({ passphrase });
   }
@@ -121,7 +121,7 @@ export class KeyService {
   }
 
   private readKeyFile() {
-    const rawContent = fs.readFileSync(keyFilePath).toString();
+    const rawContent = fs.readFileSync(this.keyFilePath).toString();
     return JSON.parse(rawContent) as IKeyFile;
   }
 
@@ -136,5 +136,9 @@ export class KeyService {
     } catch {
       return false;
     }
+  }
+
+  private get keyFilePath() {
+    return path.join(config.pwd, 'store.json');
   }
 }

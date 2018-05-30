@@ -4,7 +4,7 @@ import './modal.scss';
 interface IModalProps {
   className?: string;
   title: string;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export class Modal extends React.Component<IModalProps> {
@@ -22,7 +22,7 @@ export class Modal extends React.Component<IModalProps> {
         <div className='modal-inner-container'>
           <div className={`modal ${this.props.className || ''}`}>
             {this.props.title && <div className='modal-header'>{this.props.title}</div>}
-            <div className='close' onClick={this.props.onClose} />
+            {this.props.onClose && <div className='close' onClick={this.props.onClose} />}
             {this.props.children}
           </div>
         </div>

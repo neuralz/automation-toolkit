@@ -1,0 +1,65 @@
+{
+  "name": "@ercdex/electron-app",
+  "description": "ERC dEX Automation Toolkit",
+  "author": "ERC dEX",
+  "version": "2.0.0",
+  "scripts": {
+    "start:main": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && electron-webpack dev",
+    "compile": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && electron-webpack",
+    "build:api": "webpack --config webpack.api.config.js --mode=development",
+    "pack": "electron-builder --dir",
+    "dist": "yarn compile && electron-builder"
+  },
+  "devDependencies": {
+    "@types/node": "^10.1.2",
+    "asar": "^0.14.3",
+    "copy-webpack-plugin": "^4.5.1",
+    "electron": "^2.0.2",
+    "electron-builder": "^20.15.3",
+    "electron-webpack": "^2.1.2",
+    "electron-webpack-ts": "^2.0.2",
+    "rimraf": "^2.6.2",
+    "ts-loader": "^4.3.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.9.1",
+    "webpack-cli": "^2.1.4",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-sources": "^1.1.0"
+  },
+  "private": true,
+  "dependencies": {
+    "@ercdex/aqueduct": "^1.2.4",
+    "@ercdex/aqueduct-remote": "^2.0.0",
+    "@ercdex/market-maker-api": "^2.0.0",
+    "mime": "1.6.0",
+    "source-map-support": "^0.5.6"
+  },
+  "resolutions": {
+    "webpack-sources": "1.0.1",
+    "**/mime": "1.6.0"
+  },
+  "build": {
+    "appId": "ercdex",
+    "productName": "ERC dEX Automation Toolkit",
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "files": [
+        "**/*",
+        "!**/typescript${/*}",
+        "!**/handlebars${/*}",
+        "!**/@types${/*}",
+        "!**/aqueduct/docs${/*}",
+        "!**/aqueduct/guides${/*}",
+        "!**/*.ts",
+        "!**/*.scss",
+        "!**/*.tsx",
+        "!**/*.js.map",
+        "!**/*.js.map.json"
+      ]
+    },
+    "asar": false
+  },
+  "electronWebpack": {
+    "renderer": null
+  }
+}
