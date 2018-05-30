@@ -3,12 +3,18 @@
   "description": "ERC dEX Automation Toolkit",
   "author": "ERC dEX",
   "version": "2.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ERCdEX/automation-toolkit"
+  },
   "scripts": {
     "start:main": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && electron-webpack dev",
     "compile": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && electron-webpack",
     "build:api": "webpack --config webpack.api.config.js --mode=development",
     "pack": "electron-builder --dir",
-    "dist": "yarn compile && electron-builder"
+    "dist": "yarn compile && electron-builder --mac --win",
+    "pub": "yarn compile && electron-builder --mac --win --publish=always"
   },
   "devDependencies": {
     "@types/node": "^10.1.2",
@@ -16,6 +22,7 @@
     "copy-webpack-plugin": "^4.5.1",
     "electron": "^2.0.2",
     "electron-builder": "^20.15.3",
+    "electron-updater": "^2.21.10",
     "electron-webpack": "^2.1.2",
     "electron-webpack-ts": "^2.0.2",
     "rimraf": "^2.6.2",
@@ -43,21 +50,34 @@
     "productName": "ERC dEX Automation Toolkit",
     "mac": {
       "category": "public.app-category.developer-tools",
-      "files": [
-        "**/*",
-        "!**/typescript${/*}",
-        "!**/handlebars${/*}",
-        "!**/@types${/*}",
-        "!**/aqueduct/docs${/*}",
-        "!**/aqueduct/guides${/*}",
-        "!**/*.ts",
-        "!**/*.scss",
-        "!**/*.tsx",
-        "!**/*.js.map",
-        "!**/*.js.map.json"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ]
     },
-    "asar": false
+    "publish": [
+      "github"
+    ],
+    "files": [
+      "**/*",
+      "!**/typescript${/*}",
+      "!**/handlebars${/*}",
+      "!**/@types${/*}",
+      "!**/aqueduct/docs${/*}",
+      "!**/aqueduct/guides${/*}",
+      "!**/*.ts",
+      "!**/*.scss",
+      "!**/*.tsx",
+      "!**/*.js.map",
+      "!**/*.js.map.json"
+    ]
   },
   "electronWebpack": {
     "renderer": null

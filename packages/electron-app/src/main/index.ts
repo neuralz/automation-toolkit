@@ -1,9 +1,13 @@
 import { startAqueductServer } from '@ercdex/aqueduct-remote';
 import { startServer } from '@ercdex/market-maker-api';
 import { app, BrowserWindow, Menu, shell } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import * as path from 'path';
 import * as url from 'url';
+import { checkForUpdates } from './check-for-updates';
 import { openAboutWindow } from './windows/about';
+
+autoUpdater.checkForUpdatesAndNotify();
 
 /**
  * There is a bug with either yarn, lerna, electron-builder, electron-webpack, or some other
@@ -39,6 +43,13 @@ const createWindow = async () => {
           click: () => {
             openAboutWindow();
           }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Check for Updates',
+          click: checkForUpdates
         },
         {
           type: 'separator'
