@@ -27,7 +27,7 @@ export interface IRepository<T, S extends StoredModel<T>> {
 }
 
 export abstract class Repository<T, S extends StoredModel<T>> implements IRepository<T, S> {
-  private datastore: Datastore | undefined;
+  private networkDatastores: { [networkId: number]: Datastore | undefined } = {};
 
   public async create(data: T) {
     const datastore = await this.initialize();
@@ -107,7 +107,8 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
   }
 
   private async initialize() {
-    if (this.datastore) { return this.datastore; }
+    const cachedDatastore = this.networkDatastores[config.networkId];
+    if (cachedDatastore) { return cachedDatastore; }
 
     let directory: string;
     if (process.env.NODE_ENV === 'test') {
@@ -119,10 +120,11 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
       directory = `${config.pwd}/data/${config.chain}`;
     }
 
-    this.datastore = new Datastore({
+    const datastore = new Datastore({
       filename: `${directory}/${this.constructor.name.toLowerCase().replace('repository', '')}.db`,
       autoload: true
     });
-    return this.datastore;
+    this.networkDatastores[config.networkId] = datastore;
+    return datastore;
   }
 }

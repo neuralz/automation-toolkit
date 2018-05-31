@@ -1,11 +1,6 @@
-const chain = 'kovan';
-
-const networkId = 42;
-const nodeUrl = 'https://kovan.infura.io';
-
 export const config = {
-  nodeUrl,
-  networkId,
-  chain,
+  nodeUrl: 'https://kovan.infura.io',
+  networkId: 42,
+  chain: 'kovan',
   pwd: ''
 };

@@ -3,14 +3,22 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as http from 'http';
 import * as methodOverride from 'method-override';
-// tslint:disable-next-line
-const webSocket = require('html5-websocket');
 import { config } from './config';
 import './controllers/trading-controller';
 import './controllers/wallet-controller';
 import { RegisterRoutes } from './routes';
+// tslint:disable-next-line
+const webSocket = require('html5-websocket');
 
-export const startAqueductServer = async (pwd: string) => {
+export interface INetworkSettings {
+  id: number;
+  chain: 'kovan' | 'mainnet';
+}
+
+export const startAqueductServer = async (pwd: string, networkSettings: INetworkSettings) => {
+  config.chain = networkSettings.chain;
+  config.networkId = networkSettings.id;
+  config.nodeUrl = networkSettings.id === 1 ? 'https://mainnet.infura.io' : 'https://kovan.infura.io';
   config.pwd = pwd;
   (global as any).WebSocket = webSocket;
 
@@ -58,4 +66,6 @@ export const startAqueductServer = async (pwd: string) => {
     }
     console.log(`Listening on 0.0.0.0:${port}`);
   });
+
+  return server;
 };

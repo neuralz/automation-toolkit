@@ -37,6 +37,11 @@ export namespace Dashboard {
       tokenAddress: string;
     }
 
+    export interface INetwork {
+      id: number;
+      chain: string;
+    }
+
     export interface IStoredBand {
       marketId: string;
       units: number;
@@ -311,6 +316,14 @@ export namespace Dashboard {
           url: `${baseApiUrl}/api/accounts/get_eth_balance`
         };
         return this.executeRequest<string>(requestParams);
+      }
+
+      public async getNetwork() {
+        const requestParams: IRequestParams = {
+          method: 'GET',
+          url: `${baseApiUrl}/api/accounts/get_network`
+        };
+        return this.executeRequest<INetwork>(requestParams);
       }
     }
     export class BandsService extends ApiService {

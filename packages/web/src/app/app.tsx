@@ -10,6 +10,7 @@ import { tokenPairStore } from 'stores/token-pair-store';
 import './app.scss';
 import { FlashMessage } from './flash-message/flash-message';
 import { Home } from './home/home';
+import { StatusBar } from './status-bar';
 
 interface IAppProps {
 }
@@ -24,7 +25,7 @@ export class App extends React.Component<IAppProps> {
 
   public render() {
     if (!tokenPairStore.tokenPairs) {
-      return <LoadingScreen />;
+      return <LoadingScreen height='100%' message='Initializing' />;
     }
 
     return (
@@ -36,6 +37,7 @@ export class App extends React.Component<IAppProps> {
             <Redirect to={getPath(p => p.home)} />
           </Switch>
         </div>
+        <StatusBar />
       </div>
     );
   }

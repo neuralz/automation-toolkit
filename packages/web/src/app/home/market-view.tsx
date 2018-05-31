@@ -12,6 +12,7 @@ import { tokenPairStore } from 'stores/token-pair-store';
 import { BalanceHistory } from './balance-history';
 import { Bands } from './bands/bands';
 import { EditMarket } from './edit-market';
+import { LiveMarket } from './live-market';
 import { MarketLogViewer } from './log-viewer/market-log-viewer';
 import { MarketStats } from './market-stats';
 import './market-view.scss';
@@ -38,6 +39,7 @@ export class MarketView extends React.Component<IMarketViewProps> {
   @observable private isViewingReports = false;
   @observable private confirmDeleteProps?: IConfirmModalProps;
   @observable private isEditing = false;
+  @observable private viewingMarket?: string;
 
   constructor(public readonly props: IMarketViewProps) {
     super(props);
@@ -91,7 +93,7 @@ export class MarketView extends React.Component<IMarketViewProps> {
               </div>
             </div>
             <div className='separator' />
-            <a className='to-market control fl vc' href={this.marketUrl} target='_blank'>
+            <a className='to-market control fl vc' onClick={this.handleClickLiveMarket(this.marketUrl)}>
               <img src='images/toolPopout.svg' />
               <span>Live Market</span>
             </a>
@@ -118,6 +120,7 @@ export class MarketView extends React.Component<IMarketViewProps> {
           Are you sure you want to remove this market? This action is irreversible.
           </ConfirmModal>}
         {this.isEditing && <EditMarket onClose={this.onCloseEditMarket} market={this.market} onSuccess={this.onSuccess} />}
+        {this.viewingMarket && <LiveMarket url={this.viewingMarket} onClose={this.onCloseLiveMarket} />}
       </div>
     );
   }
@@ -125,14 +128,17 @@ export class MarketView extends React.Component<IMarketViewProps> {
   private readonly onCloseEditMarket = () => this.isEditing = false;
   private readonly onClickEditMarket = () => this.isEditing = true;
 
+  private handleClickLiveMarket = (url: string) => () => this.viewingMarket = url;
+  private onCloseLiveMarket = () => this.viewingMarket = undefined;
+
   private async loadMarket() {
     this.market = marketStore.markets.find(m => m._id === this.props.match.params.id);
     this.isStarted = !!(this.market && this.market.active);
 
     if (this.market) {
       const networkId = await new Dashboard.Api.MarketsService().getNetworkId();
-      const ercDexBaseUrl = `https://${networkId === 42 ? 'test' : 'app'}.ercdex.com`;
-      this.marketUrl = `${ercDexBaseUrl}/#/${this.market.baseTokenSymbol}/${this.market.quoteTokenSymbol}`;
+      const ercDexBaseUrl = `https://${networkId === 42 ? 'test' : 'app'}.ercdex.com?iframe=1&theme=light`;
+      this.marketUrl = `${ercDexBaseUrl}#/${this.market.baseTokenSymbol}/${this.market.quoteTokenSymbol}`;
     } else {
       this.marketUrl = '';
     }

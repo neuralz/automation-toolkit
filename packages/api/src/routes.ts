@@ -36,6 +36,12 @@ const models: TsoaRoute.Models = {
       "tokenAddress": { "dataType": "string", "required": true },
     },
   },
+  "INetwork": {
+    "properties": {
+      "id": { "dataType": "double", "required": true },
+      "chain": { "dataType": "string", "required": true },
+    },
+  },
   "IStoredBand": {
     "properties": {
       "marketId": { "dataType": "string", "required": true },
@@ -319,6 +325,24 @@ export function RegisterRoutes(app: any) {
 
 
       const promise = controller.getEthBalance.apply(controller, validatedArgs);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.get('/api/accounts/get_network',
+    function(request: any, response: any, next: any) {
+      const args = {
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new AccountsController();
+
+
+      const promise = controller.getNetwork.apply(controller, validatedArgs);
       promiseHandler(controller, promise, response, next);
     });
   app.get('/api/bands',

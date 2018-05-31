@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, app } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -12,9 +12,12 @@ export const openAboutWindow = () => {
 
   win.loadURL(
     url.format({
-      pathname: path.join(__static, 'about.html'),
+      pathname: path.join(__static, `about.html`),
       protocol: 'file:',
-      slashes: true
+      slashes: true,
+      query: {
+        version: app.getVersion()
+      }
     })
   );
 

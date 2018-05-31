@@ -3,7 +3,7 @@ import './modal.scss';
 
 interface IModalProps {
   className?: string;
-  title: string;
+  title?: string;
   onClose?: () => void;
 }
 

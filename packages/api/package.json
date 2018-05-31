@@ -6,7 +6,7 @@
   "typings": "dist/api/src/server.d.ts",
   "scripts": {
     "prepare": "yarn build",
-    "build": "yarn swagger:gen && yarn routes:gen && tsc",
+    "build": "tsc",
     "start:server": "yarn build && node ./dist/api/src/start-server.js",
     "swagger:gen": "tsoa swagger",
     "routes:gen": "tsoa routes",
@@ -46,7 +46,10 @@
     "superagent": "^3.8.2",
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
-    "typescript": "^2.8.1",
+    "typescript": "2.8.1",
     "yargs": "^11.0.0"
+  },
+  "resolutions": {
+    "tsoa/**/typescript": "2.8.1"
   }
 }

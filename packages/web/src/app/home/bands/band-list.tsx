@@ -65,12 +65,12 @@ export class BandList extends React.Component<IBandListProps> {
         widthPoints: 1
       },
       {
-        header: 'Units',
+        header: 'Weight',
         getElement: b => <span>{b.units}</span>,
         widthPoints: 1
       },
       {
-        header: 'Min. Units',
+        header: 'Min. Weight',
         getElement: b => <span>{b.minUnits}</span>,
         widthPoints: 1
       },
@@ -131,9 +131,9 @@ export class BandList extends React.Component<IBandListProps> {
           onChange={this.handleInputChange(v => this.spreadBps = v)} errorMessage={this.spreadValidation().error} />
         <TextInput required={true} type='string' placeholder='Tolerance BPS'
           onChange={this.handleInputChange(v => this.toleranceBps = v)} errorMessage={this.toleranceValidation().error} />
-        <TextInput required={true} type='string' placeholder='Units'
+        <TextInput required={true} type='string' placeholder='Weight'
           onChange={this.handleInputChange(v => this.units = v)} errorMessage={this.unitsValidation().error} />
-        <TextInput required={true} type='string' placeholder='Min Units'
+        <TextInput required={true} type='string' placeholder='Min Weight'
           onChange={this.handleInputChange(v => this.minUnits = v)} errorMessage={this.minUnitsValidation().error} />
         <TextInput required={true} type='string' placeholder='Duration (seconds)'
           onChange={this.handleInputChange(v => this.duration = v)} errorMessage={this.durationValidation().error} />

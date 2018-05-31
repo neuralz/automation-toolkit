@@ -4,27 +4,9 @@ The ERC dEX Automation Toolkit allows traders to create custom trading strategie
 
 # Installation
 
-## System Requirements
-- The application uses `docker-compose` to run all services (local web dashboard and APIs). Docker-compose can be installed on any MacOS, Windows, or Linux machine. Follow the instructions at https://docs.docker.com/compose/install to install docker-compose on your platform.
-    - There are [known issues](https://github.com/docker/for-mac/issues/1374) when running on some versions of Docker for Mac. External network calls may fail after the application has been running for several hours. Restarting the Docker Daemon should return service.
-- `docker-compose` requires `docker`. For most use cases, choose Docker CE edition, not Docker EE.
-
-## Download
-- Run installation script
-    - `bash <(curl -s https://raw.githubusercontent.com/ERCdEX/automation-toolkit/master/update.sh)`
-    - Or: Download the [latest release](https://raw.githubusercontent.com/ERCdEX/automation-toolkit/master/release.zip) and unpack the .zip in a location of your choice
-- Alternatively, run from source by cloning the repository
-
-# Downloading updates
-- Run `sh update.sh`
+Installers available for Windows, Mac, and Linux on the [Releases](https://github.com/ERCdEX/automation-toolkit/releases) page
 
 # Configuration
-
-## Starting the application
-
-- Start process
-  - `sh run.sh <mainnet or kovan>` or `sudo sh run.sh <mainnet or kovan>`
-- Visit http://localhost:8663 to view the dashboard
 
 ## Importing Ethereum Wallet
 
@@ -66,7 +48,7 @@ With this in mind, the toolkit is designed to optimize for **keeping gas costs a
 
 While the UI Dashboard is a novel and useful way of manually managing bands, it requires a person to man the dashboard and make adjustments based on price action or other feedback mechanisms. This aligns with some but not all trading strategies.
 
-The toolkit supports programmatic band management via a local REST API which can be used with the included [JS client](./web/src/api/api.ts) or by calling the API from a client of your choice. Users may then manage bands via some custom/external source of feedback. This allows automated trading in a trustless, non-custodial context while abstract away the complexities of blockchain interaction.
+The toolkit supports programmatic band management via a local REST API which can be used with the included [JS client](./packages/web/src/api/api.ts) or by calling the API from a client of your choice. Users may then manage bands via some custom/external source of feedback. This allows automated trading in a trustless, non-custodial context while abstract away the complexities of blockchain interaction.
 
 # Usage
 
@@ -93,8 +75,8 @@ By default, a market will have no bands; the first step in actually deploying a 
 
 - **Spread BPS**: The spread is defined as the different between the market price on a side (buy or sell) and the midpoint price or market price. 1 bp (basis point) = .1% = .0001
 - **Tolerance BPS**: The tolerance specifies how far in BPS the market price can move before an order is considered out of band
-- **Units** Units represents how much a band consumes of the Total Market Commitment (TMC). A **Unit** is not related in any way to a token unit (e.g. 200 ZRX) - units are purely relative.
-- **Mininum Units** Minimum unit commitment for a particular band; if deployed orders are filled below this amount, additional orders will be created to keep the band fully committed
+- **Weight** Weight represents how much a band consumes of the Total Market Commitment (TMC).
+- **Minimum Weight** Minimum weight commitment for a particular band; if deployed orders are filled below this amount, additional orders will be created to keep the band fully committed
 - **Duration** Expiration period of deployed orders in seconds. Limited to 300-1200 seconds (5-20 minutes).
 
 ### Starting/Stopping

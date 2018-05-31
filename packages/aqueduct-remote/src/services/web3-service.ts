@@ -8,7 +8,7 @@ import { config } from '../config';
 import { KeyService } from './key-service';
 
 export class Web3Service {
-  private web3?: Web3;
+  private web3map: { [nodeUrl: string]: Web3 | undefined } = {};
 
   public static getInstance() {
     return new Web3Service();
@@ -22,8 +22,9 @@ export class Web3Service {
   }
 
   public getWeb3() {
-    if (this.web3) {
-      return this.web3;
+    const cachedWeb3 = this.web3map[config.nodeUrl];
+    if (cachedWeb3) {
+      return cachedWeb3;
     }
 
     const provider = new ProviderEngine();
@@ -35,8 +36,8 @@ export class Web3Service {
     }));
     provider.start();
 
-    this.web3 = new Web3(provider);
-    return this.web3;
+    const web3 = this.web3map[config.nodeUrl] = new Web3(provider);
+    return web3;
   }
 
   private async _getEthBalance(account: string) {
@@ -49,4 +50,4 @@ export class Web3Service {
   }
 }
 
-export const web3service = Web3Service.getInstance();
+export let web3service = Web3Service.getInstance();

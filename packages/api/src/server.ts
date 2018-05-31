@@ -1,8 +1,6 @@
 import { Aqueduct } from '@ercdex/aqueduct';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
-// tslint:disable-next-line
-const webSocket = require('html5-websocket');
 import * as http from 'http';
 import * as methodOverride from 'method-override';
 import { tickerDataCache } from './cache/ticker-data-cache';
@@ -18,6 +16,8 @@ import { RegisterRoutes } from './routes';
 import { PendingAqueductService } from './services/pending-aqueduct-service';
 import { AqueductRemote } from './swagger/aqueduct-remote';
 import { Worker } from './worker/worker';
+// tslint:disable-next-line
+const webSocket = require('html5-websocket');
 
 export const startServer = async (pwd: string) => {
   (global as any).WebSocket = webSocket;
@@ -89,4 +89,6 @@ export const startServer = async (pwd: string) => {
   process.on('unhandledRejection', err => {
     console.log(err);
   });
+
+  return server;
 };

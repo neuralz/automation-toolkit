@@ -1,5 +1,5 @@
 {
-  "name": "@ercdex/electron-app",
+  "name": "@ercdex/automation-toolkit",
   "description": "ERC dEX Automation Toolkit",
   "author": "ERC dEX",
   "version": "2.0.0",
@@ -9,15 +9,16 @@
     "url": "https://github.com/ERCdEX/automation-toolkit"
   },
   "scripts": {
-    "start:main": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && electron-webpack dev",
-    "compile": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && electron-webpack",
-    "build:api": "webpack --config webpack.api.config.js --mode=development",
+    "start:main": "rimraf dist && lerna run prepare && sh copy-siblings.sh && electron-webpack dev",
+    "compile": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && sh copy-siblings.sh && electron-webpack",
     "pack": "electron-builder --dir",
     "dist": "yarn compile && electron-builder --mac --win",
-    "pub": "yarn compile && electron-builder --mac --win --publish=always"
+    "dist:mac": "yarn compile && electron-builder --mac",
+    "dist:linux": "yarn compile && electron-builder --linux",
+    "release": "yarn compile && electron-builder --mac --windows"
   },
   "devDependencies": {
-    "@types/node": "^10.1.2",
+    "@0xproject/typescript-typings": "^0.2.0",
     "asar": "^0.14.3",
     "copy-webpack-plugin": "^4.5.1",
     "electron": "^2.0.2",
@@ -38,36 +39,36 @@
     "@ercdex/aqueduct": "^1.2.4",
     "@ercdex/aqueduct-remote": "^2.0.0",
     "@ercdex/market-maker-api": "^2.0.0",
-    "mime": "1.6.0",
     "source-map-support": "^0.5.6"
   },
   "resolutions": {
     "webpack-sources": "1.0.1",
-    "**/mime": "1.6.0"
+    "**/web3-provider-engine": "14.0.5"
   },
   "build": {
     "appId": "ercdex",
     "productName": "ERC dEX Automation Toolkit",
     "mac": {
-      "category": "public.app-category.developer-tools",
+      "category": "public.app-category.developer-tools"
     },
     "win": {
       "target": [
         {
           "target": "nsis",
           "arch": [
-            "x64",
-            "ia32"
+            "x64"
           ]
         }
       ]
+    },
+    "linux": {
+      "target": ["AppImage"]
     },
     "publish": [
       "github"
     ],
     "files": [
       "**/*",
-      "!**/typescript${/*}",
       "!**/handlebars${/*}",
       "!**/@types${/*}",
       "!**/aqueduct/docs${/*}",
@@ -77,7 +78,8 @@
       "!**/*.tsx",
       "!**/*.js.map",
       "!**/*.js.map.json"
-    ]
+    ],
+    "asar": false
   },
   "electronWebpack": {
     "renderer": null

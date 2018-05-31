@@ -1,6 +1,6 @@
 {
   "swagger": {
-      "outputDirectory": "./dist",
+    "outputDirectory": "./dist/aqueduct-remote/src",
       "entryFile": "./src/server.ts",
       "basePath": "/api",
       "name": "Market Maker Dashboard API"

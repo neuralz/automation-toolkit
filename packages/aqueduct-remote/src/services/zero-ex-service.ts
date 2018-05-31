@@ -11,24 +11,15 @@ export interface ICancelReceipt {
 }
 
 export class ZeroExService {
-  private readonly zeroEx: ZeroEx;
-  private readonly web3 = web3service.getWeb3();
-
-  constructor() {
-    this.zeroEx = new ZeroEx(this.web3.currentProvider, {
-      networkId: config.networkId
-    });
-  }
-
   public async getTokenBalance(tokenAddress: string) {
     const account = new KeyService().getAccount();
-    const balance = await this.zeroEx.token.getBalanceAsync(tokenAddress, account);
+    const balance = await this.getZeroEx().token.getBalanceAsync(tokenAddress, account);
     return balance.toString();
   }
 
   public async getTokenAllowance(tokenAddress: string) {
     const account = new KeyService().getAccount();
-    const allowance = await this.zeroEx.token.getProxyAllowanceAsync(tokenAddress, account);
+    const allowance = await this.getZeroEx().token.getProxyAllowanceAsync(tokenAddress, account);
     return allowance.toString();
   }
 
@@ -36,9 +27,9 @@ export class ZeroExService {
     try {
       console.log(`setting allowance for ${tokenAddress}`);
       const account = new KeyService().getAccount();
-      const txHash = await this.zeroEx.token.setUnlimitedProxyAllowanceAsync(tokenAddress, account);
+      const txHash = await this.getZeroEx().token.setUnlimitedProxyAllowanceAsync(tokenAddress, account);
       console.log(`set allowance @ ${txHash}`);
-      await this.zeroEx.awaitTransactionMinedAsync(txHash);
+      await this.getZeroEx().awaitTransactionMinedAsync(txHash);
     } catch (err) {
       throw new ServerError(`error setting token allowance: ${err.message}`, 500);
     }
@@ -46,7 +37,7 @@ export class ZeroExService {
 
   public async getCancelReceipt(txHash: string): Promise<ICancelReceipt> {
     try {
-      const receipt = await this.zeroEx.awaitTransactionMinedAsync(txHash, 5000);
+      const receipt = await this.getZeroEx().awaitTransactionMinedAsync(txHash, 5000);
       const tx = await this.getTx(txHash);
 
       return {
@@ -60,10 +51,17 @@ export class ZeroExService {
 
   private async getTx(txHash: string) {
     return new Promise<Transaction>((resolve, reject) => {
-      this.web3.eth.getTransaction(txHash, (err, tx) => {
+      web3service.getWeb3().eth.getTransaction(txHash, (err, tx) => {
         if (err) { return reject(err); }
         resolve(tx);
       });
+    });
+  }
+
+  private getZeroEx() {
+    const web3 = web3service.getWeb3();
+    return new ZeroEx(web3.currentProvider, {
+      networkId: config.networkId
     });
   }
 }

@@ -25,6 +25,11 @@ export interface IConfigurationStatus {
   imported: boolean;
 }
 
+export interface INetwork {
+  id: number;
+  chain: string;
+}
+
 @Route('accounts')
 export class AccountsController {
   @Get()
@@ -71,5 +76,11 @@ export class AccountsController {
   @Tags('Accounts')
   public async getEthBalance(): Promise<string> {
     return await new AqueductRemote.Api.WalletService().getEthBalance();
+  }
+
+  @Get('get_network')
+  @Tags('Accounts')
+  public async getNetwork(): Promise<INetwork> {
+    return await new AqueductRemote.Api.WalletService().getNetwork();
   }
 }

@@ -1,4 +1,4 @@
-import { startAqueductServer } from '@ercdex/aqueduct-remote';
+import { startAqueductServer, INetworkSettings } from '@ercdex/aqueduct-remote';
 import { startServer } from '@ercdex/market-maker-api';
 import { app, BrowserWindow, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -6,33 +6,56 @@ import * as path from 'path';
 import * as url from 'url';
 import { checkForUpdates } from './check-for-updates';
 import { openAboutWindow } from './windows/about';
+import * as fs from 'fs';
 
 autoUpdater.checkForUpdatesAndNotify();
 
-/**
- * There is a bug with either yarn, lerna, electron-builder, electron-webpack, or some other
- * piece of this <REDACTED> that packages in the wrong version of a package called mime. Luckily, this
- * is JavaScript so I can just reshape packages with impunity
- */
-// tslint:disable-next-line
-const mime: any = require('mime');
-mime.charsets = {
-  lookup: (mimeType: any, fallback: any) => {
-    // Assume text types are utf8
-    return (/^text\/|^application\/(javascript|json)/).test(mimeType) ? 'UTF-8' : fallback;
-  }
-};
-
 declare const __static: string;
+
+const kovanNetwork: INetworkSettings = { id: 42, chain: 'kovan' };
+const mainNetwork: INetworkSettings = { id: 1, chain: 'mainnet' };
+const userDataPath = app.getPath('userData');
+const chainCachePath = path.join(userDataPath, 'chain');
+const cacheNetwork = (chain: string) => fs.writeFileSync(chainCachePath, chain);
+const getCachedNetwork = () => {
+  try {
+    const result = fs.readFileSync(chainCachePath).toString();
+    if (result === 'kovan' || result === 'mainnet') {
+      return result;
+    }
+    return;
+  } catch {
+    return;
+  }
+}
 
 let win: BrowserWindow | undefined;
 
-// tslint:disable-next-line:no-console
-startAqueductServer(app.getPath('userData'));
-startServer(app.getPath('userData'));
+app.makeSingleInstance(() => {
+  if (win) {
+    if (win.isMinimized()) {
+      win.restore();
+    }
+    win.show();
+    win.focus();
+  }
+  return true;
+});
 
 const createWindow = async () => {
   win = new BrowserWindow();
+
+  // tslint:disable-next-line:no-console
+  const cachedNetwork = getCachedNetwork();
+  let networkSettings: INetworkSettings = cachedNetwork === 'kovan' ? kovanNetwork : mainNetwork;
+  await startAqueductServer(userDataPath, networkSettings);
+  await startServer(userDataPath);
+
+  const selectNetwork = async (settings: INetworkSettings) => {
+    cacheNetwork(settings.chain);
+    app.relaunch();
+    app.exit()
+  };
 
   const menuTemplate: Electron.MenuItemConstructorOptions[] = [
     {
@@ -59,6 +82,32 @@ const createWindow = async () => {
           click: () => {
             app.quit();
           }
+        }
+      ]
+    },
+    {
+      label: 'Options',
+      submenu: [
+        {
+          label: 'Network',
+          submenu: [
+            {
+              label: 'Mainnet',
+              type: 'radio',
+              checked: networkSettings.id === 1,
+              click: () => {
+                selectNetwork(mainNetwork);
+              }
+            },
+            {
+              label: 'Kovan (testnet)',
+              type: 'radio',
+              checked: networkSettings.id === 42,
+              click: () => {
+                selectNetwork(kovanNetwork);
+              }
+            }
+          ]
         }
       ]
     },
