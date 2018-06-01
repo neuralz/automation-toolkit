@@ -38,6 +38,6 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src/market-maker-ui/images', to: './images' },
       { from: './src/market-maker-ui/vendor', to: './vendor' }
-    ]),
+    ])
   ]
 }

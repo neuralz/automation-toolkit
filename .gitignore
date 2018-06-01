@@ -1,12 +1,7 @@
 **/node_modules
 **/dist
 .DS_Store
-.keys
-**/*.db
-data
 .env
-release
-release-*.zip
 static
 yarn-error.log
-lerna-debug.log
+out

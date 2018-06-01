@@ -31,7 +31,7 @@ export class App extends React.Component<IAppProps> {
     return (
       <div className='app fl co'>
         <link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700' rel='stylesheet' />
-        <link rel='stylesheet' href='/vendor/css/fontawesome-all.min.css' />
+        <link rel='stylesheet' href='vendor/css/fontawesome-all.min.css' />
         <FlashMessage />
         <div className='app-content'>
           <Switch>

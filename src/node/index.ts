@@ -41,7 +41,9 @@ app.makeSingleInstance(() => {
 });
 
 const createWindow = async () => {
-  win = new BrowserWindow();
+  win = new BrowserWindow({
+    title: 'ERC dEX Automation Toolkit'
+  });
 
   // tslint:disable-next-line:no-console
   const cachedNetwork = getCachedNetwork();

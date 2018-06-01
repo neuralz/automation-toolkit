@@ -22,7 +22,7 @@ export class Modal extends React.Component<IModalProps> {
         <div className='modal-inner-container'>
           <div className={`modal ${this.props.className || ''}`}>
             {this.props.title && <div className='modal-header'>{this.props.title}</div>}
-            {this.props.onClose && <img src='/images/close.svg' className='close' onClick={this.props.onClose} />}
+            {this.props.onClose && <img src='images/close.svg' className='close' onClick={this.props.onClose} />}
             {this.props.children}
           </div>
         </div>

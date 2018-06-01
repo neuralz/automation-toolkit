@@ -1,27 +1,24 @@
 {
-  "name": "@ercdex/market-maker-ui",
+  "name": "ercdex-automation-toolkit",
   "description": "Market Maker Dashboard",
   "author": "ERC dEX",
   "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "build:web": "webpack --mode=development",
-    "cli": "ts-node src/cli/cli.ts",
-    "compile": "rimraf dist && rimraf static && lerna run prepare && lerna run build:web && sh copy-siblings.sh && electron-webpack",
+    "compile": "rm -rf out && electron-webpack",
     "dist:linux": "yarn compile && electron-builder --linux",
     "dist:mac": "yarn compile && electron-builder --mac",
-    "dist": "yarn compile && electron-builder --mac --win",
+    "dist": "yarn compile && electron-builder --mwl",
+    "release": "yarn dist",
     "generate:aqueduct:remote": "ts-node ./src/swagger/generate-client.ts --baseApiUrl=http://localhost:8700 --outputPath ./swagger/aqueduct-remote.ts --namespace AqueductRemote",
     "generate:client": "ts-node ./src/swagger/generate-client.ts --baseApiUrl=http://localhost:8662 --outputPath api/api.ts --namespace Dashboard",
-    "pack": "electron-builder --dir",
-    "prepare": "yarn build",
-    "release": "yarn compile && electron-builder --mac --windows",
     "start:app": "electron-webpack dev",
     "test": "rm -rf ./test-data && NODE_ENV=test mocha -t 15000 -r ts-node/register src/tests/**/*.spec.ts",
-    "tsoa:aqueduct-remote": "yarn swagger:gen:aqueduct-remote && yarn routes:gen:aqueduct-remote", 
+    "tsoa:aqueduct-remote": "yarn swagger:gen:aqueduct-remote && yarn routes:gen:aqueduct-remote",
     "routes:gen:aqueduct-remote": "tsoa --configuration aqueduct-remote-tsoa.json routes",
     "swagger:gen:aqueduct-remote": "tsoa --configuration aqueduct-remote-tsoa.json swagger",
-    "tsoa:market-maker-api": "yarn swagger:gen:market-maker-api && yarn routes:gen:market-maker-api", 
+    "tsoa:market-maker-api": "yarn swagger:gen:market-maker-api && yarn routes:gen:market-maker-api",
     "routes:gen:market-maker-api": "tsoa --configuration=market-maker-api-tsoa.json routes",
     "swagger:gen:market-maker-api": "tsoa --configuration=market-maker-api-tsoa.json swagger"
   },
@@ -41,7 +38,6 @@
     "request": "^2.85.0",
     "request-promise-native": "^1.0.5",
     "source-map-support": "^0.5.6",
-    "tsoa": "^2.1.4",
     "web3": "0.20.0",
     "web3-provider-engine": "14.0.5"
   },
@@ -70,7 +66,7 @@
     "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.28.7",
     "electron": "^2.0.2",
-    "electron-builder": "^20.15.3",
+    "electron-builder": "^20.15.1",
     "electron-updater": "^2.21.10",
     "electron-webpack": "^2.1.2",
     "electron-webpack-ts": "^2.0.2",
@@ -97,6 +93,7 @@
     "tslint": "^5.9.1",
     "tslint-loader": "^3.6.0",
     "tslint-react": "^3.5.1",
+    "tsoa": "^2.1.4",
     "typescript": "^2.8.3",
     "url-loader": "^1.0.1",
     "webpack": "^4.9.1",
@@ -117,14 +114,30 @@
   "build": {
     "appId": "ercdex",
     "productName": "ERC dEX Automation Toolkit",
+    "files": [
+      "src/node/**/*",
+      "src/market-maker-ui/**/*",
+      "!**/*.ts",
+      "!**/*.js.map",
+      "!**/*.js.json",
+      "!**/aqueduct/docs/**",
+      "!**/aqueduct/guides/**",
+      "!LICENSE"
+    ],
+    "directories": {
+      "buildResources": "src/node/build",
+      "output": "out"
+    },
     "mac": {
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.developer-tools",
+      "target": ["dmg"]
     },
     "win": {
       "target": [
         {
           "target": "nsis",
           "arch": [
+            "ia32",
             "x64"
           ]
         }
@@ -137,18 +150,6 @@
     },
     "publish": [
       "github"
-    ],
-    "files": [
-      "**/*",
-      "!**/handlebars${/*}",
-      "!**/@types${/*}",
-      "!**/aqueduct/docs${/*}",
-      "!**/aqueduct/guides${/*}",
-      "!**/*.ts",
-      "!**/*.scss",
-      "!**/*.tsx",
-      "!**/*.js.map",
-      "!**/*.js.map.json"
     ],
     "asar": false
   },
