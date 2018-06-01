@@ -1,4 +1,4 @@
-import { Body, Get, Post, Query, Route, Tags } from 'tsoa';
+import { Body, Delete, Get, Post, Query, Route, Tags } from 'tsoa';
 import { AqueductRemote } from '../swagger/aqueduct-remote';
 
 export interface IImportAccountRequest {
@@ -42,6 +42,12 @@ export class AccountsController {
   @Tags('Accounts')
   public async importAccount(@Body() request: IImportAccountRequest) {
     await new AqueductRemote.Api.WalletService().importAccount({ request });
+  }
+
+  @Delete('remove')
+  @Tags('Accounts')
+  public async removeAccount() {
+    await new AqueductRemote.Api.WalletService().removeAccount();
   }
 
   @Post('unlock')

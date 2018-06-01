@@ -192,6 +192,24 @@ export function RegisterRoutes(app: any) {
       const promise = controller.importAccount.apply(controller, validatedArgs);
       promiseHandler(controller, promise, response, next);
     });
+  app.delete('/api/wallet/remove',
+    function(request: any, response: any, next: any) {
+      const args = {
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new WalletController();
+
+
+      const promise = controller.removeAccount.apply(controller, validatedArgs);
+      promiseHandler(controller, promise, response, next);
+    });
   app.post('/api/wallet/unlock',
     function(request: any, response: any, next: any) {
       const args = {

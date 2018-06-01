@@ -270,6 +270,14 @@ export namespace Dashboard {
         return this.executeRequest<void>(requestParams);
       }
 
+      public async removeAccount() {
+        const requestParams: IRequestParams = {
+          method: 'DELETE',
+          url: `${baseApiUrl}/api/accounts/remove`
+        };
+        return this.executeRequest<void>(requestParams);
+      }
+
       public async unlockAccount(params: IAccountsUnlockAccountParams) {
         const requestParams: IRequestParams = {
           method: 'POST',

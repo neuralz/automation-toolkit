@@ -1,7 +1,7 @@
 /* tslint:disable:no-console */
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
-import * as request from 'superagent';
+import * as nodePath from 'path';
 import * as yargs from 'yargs';
 import * as Swagger from './swagger';
 
@@ -54,18 +54,13 @@ if (!baseApiUrl) {
   throw new Error('No baseApiUrl provided.');
 }
 
-const outputPath = yargs.argv.outputPath;
-if (!outputPath) {
-  throw new Error('No outputPath provided.');
-}
-
 const namespace = yargs.argv.namespace;
 if (!namespace) {
   throw new Error('No namespace provided.');
 }
 
 const template = () => handlebars.compile(`/* tslint:disable */
-import { ApiService, IRequestParams } from 'swagger/api-service';
+import { ApiService, IRequestParams } from '../swagger/api-service';
 
 export namespace ${namespace} {
   let baseApiUrl: string;
@@ -364,24 +359,17 @@ const getTemplateView = (swagger: Swagger.ISpec): ITemplateView => {
   };
 };
 
-const getSwaggerSpec = async () => {
-  return new Promise<Swagger.ISpec>((resolve, reject) => {
-    request
-      .get(`${baseApiUrl}/swagger.json`)
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        if (err) { return reject(err); }
-        resolve(res.body);
-      });
-  });
+const getSwaggerSpec = () => {
+  const rawSwagger = fs.readFileSync(nodePath.join(process.cwd(), 'dist/market-maker-api/swagger.json')).toString();
+  return JSON.parse(rawSwagger);
 };
 
 (async () => {
-  const spec = await getSwaggerSpec();
+  const spec = getSwaggerSpec();
 
   try {
     const compiled = template()(getTemplateView(spec));
-    fs.writeFileSync(`${__dirname}/../${outputPath}`, compiled);
+    fs.writeFileSync(nodePath.join(process.cwd(), 'src/market-maker-ui/api/api.ts'), compiled);
     console.log('Api file generated!');
   } catch (err) {
     console.log(err);

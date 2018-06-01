@@ -79,6 +79,17 @@ export class KeyService {
     this.unlockAccount({ passphrase });
   }
 
+  public removeAccount() {
+    try {
+      this.readKeyFile();
+    } catch (err) {
+      throw new ServerError(`no account has been imported`, 400);
+    }
+
+    fs.unlinkSync(this.keyFilePath);
+    instance = undefined;
+  }
+
   public unlockAccount({ passphrase }: IUnlockAccountRequest) {
     let keyFile: IKeyFile;
     try {

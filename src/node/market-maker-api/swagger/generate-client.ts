@@ -1,7 +1,7 @@
 /* tslint:disable:no-console */
 import * as fs from 'fs';
 import * as handlebars from 'handlebars';
-import * as request from 'superagent';
+import * as path from 'path';
 import * as yargs from 'yargs';
 import * as Swagger from './swagger';
 
@@ -52,11 +52,6 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0 as any;
 const baseApiUrl = yargs.argv.baseApiUrl;
 if (!baseApiUrl) {
   throw new Error('No baseApiUrl provided.');
-}
-
-const outputPath = yargs.argv.outputPath;
-if (!outputPath) {
-  throw new Error('No outputPath provided.');
 }
 
 const namespace = yargs.argv.namespace;
@@ -264,13 +259,13 @@ const getTemplateView = (swagger: Swagger.ISpec): ITemplateView => {
   Object.keys(paths)
     .forEach(pathKey => {
       const methods = ['get', 'post', 'delete', 'patch', 'put', 'options', 'head'];
-      const path = paths[pathKey];
+      const _path = paths[pathKey];
 
-      Object.keys(path)
+      Object.keys(_path)
         .filter(operationKey => methods.find(m => m === operationKey))
         .forEach(operationKey => {
-          const operation = (path as any)[operationKey] as Swagger.IOperation;
-          if (!operation.operationId || !operation.tags) { throw new Error('no tags for ' + JSON.stringify(path)); }
+          const operation = (_path as any)[operationKey] as Swagger.IOperation;
+          if (!operation.operationId || !operation.tags) { throw new Error('no tags for ' + JSON.stringify(_path)); }
 
           const tag = operation.tags[0];
           const service = serviceMap[tag] = serviceMap[tag] || { name: `${tag}Service`, operations: [] };
@@ -375,24 +370,17 @@ const getTemplateView = (swagger: Swagger.ISpec): ITemplateView => {
   };
 };
 
-const getSwaggerSpec = async () => {
-  return new Promise<Swagger.ISpec>((resolve, reject) => {
-    request
-      .get(`${baseApiUrl}/swagger.json`)
-      .set('Accept', 'application/json')
-      .end((err, res) => {
-        if (err) { return reject(err); }
-        resolve(res.body);
-      });
-  });
+const getSwaggerSpec = () => {
+  const rawSwagger = fs.readFileSync(path.join(process.cwd(), 'dist/aqueduct-remote/swagger.json')).toString();
+  return JSON.parse(rawSwagger);
 };
 
 (async () => {
-  const spec = await getSwaggerSpec();
+  const spec = getSwaggerSpec();
 
   try {
     const compiled = template()(getTemplateView(spec));
-    fs.writeFileSync(`${__dirname}/../${outputPath}`, compiled);
+    fs.writeFileSync(path.join(process.cwd(), 'src/node/market-maker-api/swagger/aqueduct-remote.ts'), compiled);
     console.log('Api file generated!');
   } catch (err) {
     console.log(err);

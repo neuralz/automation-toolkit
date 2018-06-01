@@ -234,6 +234,24 @@ export function RegisterRoutes(app: any) {
       const promise = controller.importAccount.apply(controller, validatedArgs);
       promiseHandler(controller, promise, response, next);
     });
+  app.delete('/api/accounts/remove',
+    function(request: any, response: any, next: any) {
+      const args = {
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new AccountsController();
+
+
+      const promise = controller.removeAccount.apply(controller, validatedArgs);
+      promiseHandler(controller, promise, response, next);
+    });
   app.post('/api/accounts/unlock',
     function(request: any, response: any, next: any) {
       const args = {

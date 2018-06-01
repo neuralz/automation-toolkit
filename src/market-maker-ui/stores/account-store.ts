@@ -7,11 +7,13 @@ export class AccountStore {
 
   public async initialize() {
     try {
+      this.account = undefined;
       this.account = await new Dashboard.Api.AccountsService().getAccount();
       // tslint:disable-next-line:no-empty
     } catch { }
 
     try {
+      this.status = undefined;
       this.status = await new Dashboard.Api.AccountsService().getConfigurationStatus();
       // tslint:disable-next-line:no-empty
     } catch { }

@@ -1,4 +1,4 @@
-import { Body, Get, Post, Query, Route, Tags } from 'tsoa';
+import { Body, Delete, Get, Post, Query, Route, Tags } from 'tsoa';
 import { config } from '../config';
 import { ServerError } from '../server-error';
 import { IConfigurationStatus, IImportAccountRequest, IUnlockAccountRequest, KeyService } from '../services/key-service';
@@ -27,6 +27,12 @@ export class WalletController {
   @Tags('Wallet')
   public importAccount(@Body() request: IImportAccountRequest) {
     new KeyService().importAccount(request);
+  }
+
+  @Delete('remove')
+  @Tags('Wallet')
+  public removeAccount() {
+    new KeyService().removeAccount();
   }
 
   @Post('unlock')
