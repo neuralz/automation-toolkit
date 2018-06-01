@@ -24,14 +24,14 @@ export class StatusBar extends React.Component<IStatusBarProps> {
       <React.Fragment>
         <div className='status-bar fl sb'>
           <span>
-            {accountStore.account && <span>
+            {accountStore.account && <span className='aligned-text'>
               <span className='connected-circle' />
               <strong>ACCOUNT</strong>
               <span> {accountStore.account.toLowerCase()} </span>
               <span className='link remove-account-link' onClick={this.onClickRemoveAccount}>REMOVE ACCOUNT</span>
             </span>}
           </span>
-          {this.network && <span>CONNECTED TO {this.network}</span>}
+          {this.network && <span className='aligned-text'>CONNECTED TO {this.network}</span>}
         </div>
         {this.isConfirmingRemove && accountStore.account && <ConfirmModal title='Confirm Account Removal'
           onClose={this.onCloseConfirmRemove} submitText='Confirm Removal' onSubmit={this.onSubmit} onError={this.onError}>
