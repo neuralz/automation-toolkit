@@ -14,7 +14,11 @@ export interface IStoredBand extends IBand {
   _id: string;
 }
 
-export class BandRepository extends Repository<IBand, IStoredBand> {}
+export class BandRepository extends Repository<IBand, IStoredBand> {
+  constructor() {
+    super('bands');
+  }
+}
 export interface IBandRepository extends IRepository<IBand, IStoredBand> {}
 
 export const bandRepository = new BandRepository();

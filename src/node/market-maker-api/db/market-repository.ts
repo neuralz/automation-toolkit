@@ -34,6 +34,9 @@ export interface IStoredMarket extends IMarket {
 }
 
 export class MarketRepository extends Repository<IMarket, IStoredMarket> {
+  constructor() {
+    super('markets');
+  }
 }
 
 export interface IMarketRepository extends IRepository<IMarket, IStoredMarket> {

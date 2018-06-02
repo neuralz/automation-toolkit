@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Dashboard } from '../../api/api';
+import { Button } from '../../common/form/button';
 import { Form } from '../../common/form/form';
 import { Modal } from '../../common/modal/modal';
 import { flashMessageStore } from '../flash-message/flash-message-store';
@@ -17,6 +18,7 @@ type CancellationMode = 'hard' | 'soft';
 @observer
 export class EditMarket extends React.Component<IEditMarketProps> {
   @observable private cancellationMode: CancellationMode;
+  @observable private isProcessing = false;
 
   constructor(public readonly props: IEditMarketProps) {
     super(props);
@@ -41,7 +43,7 @@ export class EditMarket extends React.Component<IEditMarketProps> {
             </div>
           </div>
           <div className='t-padding'>
-            <button className='button primary fw'>Update Market</button>
+            <Button className='button primary fw' isProcessing={this.isProcessing}>Update Market</Button>
           </div>
         </Form>
       </Modal>
@@ -51,6 +53,7 @@ export class EditMarket extends React.Component<IEditMarketProps> {
   private readonly handleModeSelect = (mode: 'hard' | 'soft') => () => this.cancellationMode = mode;
 
   private onSubmit = async () => {
+    this.isProcessing = true;
     try {
       await new Dashboard.Api.MarketsService().setCancellationMode({
         request: {
@@ -66,5 +69,6 @@ export class EditMarket extends React.Component<IEditMarketProps> {
         content: err.message
       });
     }
+    this.isProcessing = false;
   }
 }

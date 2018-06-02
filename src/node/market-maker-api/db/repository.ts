@@ -29,6 +29,8 @@ export interface IRepository<T, S extends StoredModel<T>> {
 export abstract class Repository<T, S extends StoredModel<T>> implements IRepository<T, S> {
   private networkDatastores: { [networkId: number]: Datastore | undefined } = {};
 
+  protected constructor(private readonly objectName: string) { }
+
   public async create(data: T) {
     const datastore = await this.initialize();
     return new Promise<S>((resolve, reject) => {
@@ -121,7 +123,7 @@ export abstract class Repository<T, S extends StoredModel<T>> implements IReposi
     }
 
     const datastore = new Datastore({
-      filename: `${directory}/${this.constructor.name.toLowerCase().replace('repository', '')}.db`,
+      filename: `${directory}/${this.objectName.toLowerCase().replace('repository', '')}.db`,
       autoload: true
     });
     this.networkDatastores[config.networkId] = datastore;

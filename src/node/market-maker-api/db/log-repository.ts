@@ -13,6 +13,9 @@ export interface IStoredLog extends ILog {
 }
 
 export class LogRepository extends Repository<ILog, IStoredLog> {
+  constructor() {
+    super('logs');
+  }
 }
 
 export const logRepository = new LogRepository();

@@ -41,6 +41,12 @@ export class WalletController {
     new KeyService().unlockAccount(request);
   }
 
+  @Post('lock')
+  @Tags('Wallet')
+  public lockAccount() {
+    new KeyService().lockAccount();
+  }
+
   @Get('configuration_status')
   @Tags('Wallet')
   public getConfigurationStatus(): IConfigurationStatus {

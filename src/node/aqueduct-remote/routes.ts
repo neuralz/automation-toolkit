@@ -229,6 +229,24 @@ export function RegisterRoutes(app: any) {
       const promise = controller.unlockAccount.apply(controller, validatedArgs);
       promiseHandler(controller, promise, response, next);
     });
+  app.post('/api/wallet/lock',
+    function(request: any, response: any, next: any) {
+      const args = {
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new WalletController();
+
+
+      const promise = controller.lockAccount.apply(controller, validatedArgs);
+      promiseHandler(controller, promise, response, next);
+    });
   app.get('/api/wallet/configuration_status',
     function(request: any, response: any, next: any) {
       const args = {

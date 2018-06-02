@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 import { Dashboard } from '../../api/api';
 import { flashMessageStore } from '../../app/flash-message/flash-message-store';
+import { Button } from '../../common/form/button';
 import { Form } from '../../common/form/form';
 import { Select } from '../../common/form/select';
 import { TextInput } from '../../common/form/text-input';
@@ -47,6 +48,7 @@ export class CreateMarket extends React.Component<ICreateMarketProps> {
   @observable private isSettingQuoteAllowance = false;
   @observable private confirmSetBaseAllowance = false;
   @observable private confirmSetQuoteAllowance = false;
+  @observable private isProcessing = false;
 
   constructor(public readonly props: ICreateMarketProps) {
     super(props);
@@ -127,7 +129,7 @@ export class CreateMarket extends React.Component<ICreateMarketProps> {
               submitText={`Set ${this.selectedTokenPair.tokenB.symbol} Allowance`} />}
           </div>}
           <div>
-            <button className='button primary fw' type='submit' disabled={!this.isValid()}>Submit</button>
+            <Button className='button primary fw' type='submit' isProcessing={this.isProcessing} disabled={!this.isValid()}>Submit</Button>
           </div>
         </Form>
       </Modal>
@@ -198,6 +200,7 @@ export class CreateMarket extends React.Component<ICreateMarketProps> {
 
     const { tokenA, tokenB } = this.selectedTokenPair as Dashboard.Api.ITokenPair;
 
+    this.isProcessing = true;
     try {
       const baseRes = this.baseReserve;
       const quoteRes = this.quoteReserve;
@@ -224,6 +227,7 @@ export class CreateMarket extends React.Component<ICreateMarketProps> {
         content: err.message || 'There was an error creating the market; please check your submission and try again.'
       });
     }
+    this.isProcessing = false;
   }
 
   private isValid() {

@@ -15,6 +15,7 @@ export class MarketWatcher {
   private readonly logService = new LogService();
   private readonly bandService = new BandService();
   private readonly orderService = new OrderService();
+  private readonly stoppedMarkets = new Array<string>();
 
   public async start() {
     await this.stopAllMarkets();
@@ -43,9 +44,18 @@ export class MarketWatcher {
     this.startMarket(market);
   }
 
+  public async removeMarket(marketId: string) {
+    this.stoppedMarkets.push(marketId);
+  }
+
   private async startMarket(market: IStoredMarket) {
     let isProcessing = false;
-    setInterval(async () => {
+    const interval = setInterval(async () => {
+      if (this.stoppedMarkets.indexOf(market._id) !== -1) {
+        clearInterval(interval);
+        return;
+      }
+
       if (isProcessing) { return; }
 
       isProcessing = true;

@@ -12,28 +12,6 @@
   .select-container, .text-input {
     margin-bottom: 1rem;
   }
-
-  .button {
-    padding: 1rem;
-    font-size: 1rem;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-
-    &:hover {
-      opacity: .8;
-    }
-
-    &.primary {
-      background-color: $primary;
-      color: white;
-    }
-
-    &:disabled {
-      background-color: #c3c3c3;
-      cursor: not-allowed;
-    }
-  }
 }
 
 .text-input {

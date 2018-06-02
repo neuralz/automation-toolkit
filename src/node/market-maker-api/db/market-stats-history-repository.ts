@@ -11,6 +11,9 @@ export interface IStoredMarketStatsHistory extends IMarketStatsHistory {
 }
 
 export class MarketStatsHistoryRepository extends Repository<IMarketStatsHistory, IStoredMarketStatsHistory> {
+  constructor() {
+    super('market-stats-history');
+  }
 }
 
 export const marketStatsHistoryRepository = new MarketStatsHistoryRepository();

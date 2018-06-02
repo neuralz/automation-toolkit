@@ -105,6 +105,10 @@ export class KeyService {
     }
   }
 
+  public lockAccount() {
+    instance = undefined;
+  }
+
   public getAccount() {
     try {
       this.readKeyFile();

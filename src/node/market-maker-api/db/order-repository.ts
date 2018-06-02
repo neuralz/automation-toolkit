@@ -43,6 +43,9 @@ export interface IStoredOrder extends IOrder {
 }
 
 export class OrderRepository extends Repository<IOrder, IStoredOrder> implements IOrderRepository {
+  constructor() {
+    super('orders');
+  }
 }
 
 export class IOrderRepository extends Repository<IOrder, IStoredOrder> {

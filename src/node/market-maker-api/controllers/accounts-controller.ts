@@ -56,6 +56,12 @@ export class AccountsController {
     await new AqueductRemote.Api.WalletService().unlockAccount({ request });
   }
 
+  @Post('lock')
+  @Tags('Accounts')
+  public async lock() {
+    await new AqueductRemote.Api.WalletService().lockAccount();
+  }
+
   @Get('configuration_status')
   @Tags('Accounts')
   public async getConfigurationStatus(): Promise<IConfigurationStatus> {

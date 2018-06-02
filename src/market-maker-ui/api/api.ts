@@ -288,6 +288,14 @@ export namespace Dashboard {
         return this.executeRequest<void>(requestParams);
       }
 
+      public async lock() {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/accounts/lock`
+        };
+        return this.executeRequest<void>(requestParams);
+      }
+
       public async getConfigurationStatus() {
         const requestParams: IRequestParams = {
           method: 'GET',

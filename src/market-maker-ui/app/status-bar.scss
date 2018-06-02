@@ -13,10 +13,17 @@
     margin-right: .5rem;
   }
 
-  .remove-account-link {
-    color: #ff8989;
+  .link {
     text-decoration: none;
     margin-left: 1rem;
+  }
+
+  .remove-account-link {
+    color: #ff8989;
+  }
+
+  .lock-link {
+    color: #6cc6ff;
   }
 
   .aligned-text {

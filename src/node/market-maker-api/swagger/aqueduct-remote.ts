@@ -163,6 +163,7 @@ export namespace AqueductRemote {
       importAccount(params: IWalletImportAccountParams): Promise<void>;
       removeAccount(): Promise<void>;
       unlockAccount(params: IWalletUnlockAccountParams): Promise<void>;
+      lockAccount(): Promise<void>;
       getConfigurationStatus(): Promise<IConfigurationStatus>;
       getBalance(params: IWalletGetBalanceParams): Promise<string>;
       getAllowance(params: IWalletGetAllowanceParams): Promise<string>;
@@ -206,6 +207,14 @@ export namespace AqueductRemote {
         };
 
         requestParams.body = params.request;
+        return this.executeRequest<void>(requestParams);
+      }
+
+      public async lockAccount() {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/wallet/lock`
+        };
         return this.executeRequest<void>(requestParams);
       }
 
