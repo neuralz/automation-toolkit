@@ -48,8 +48,8 @@ const createWindow = async () => {
   // tslint:disable-next-line:no-console
   const cachedNetwork = getCachedNetwork();
   let networkSettings: INetworkSettings = cachedNetwork === 'kovan' ? kovanNetwork : mainNetwork;
-  await startAqueductServer(userDataPath, networkSettings);
-  await startServer(userDataPath);
+  await startAqueductServer(userDataPath, networkSettings, '127.0.0.1');
+  await startServer(userDataPath, '127.0.0.1');
 
   const selectNetwork = async (settings: INetworkSettings) => {
     cacheNetwork(settings.chain);

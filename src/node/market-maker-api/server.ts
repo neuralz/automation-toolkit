@@ -19,7 +19,7 @@ import { Worker } from './worker/worker';
 // tslint:disable-next-line
 const webSocket = require('html5-websocket');
 
-export const startServer = async (pwd: string) => {
+export const startServer = async (pwd: string, hostIp = '0.0.0.0') => {
   (global as any).WebSocket = webSocket;
 
   AqueductRemote.Initialize({ host: 'localhost:8700' });
@@ -73,7 +73,7 @@ export const startServer = async (pwd: string) => {
   });
 
   const port = 8662;
-  server.listen(port, '0.0.0.0', (err: Error) => {
+  server.listen(port, hostIp, (err: Error) => {
     if (err) {
       return console.log(err);
     }

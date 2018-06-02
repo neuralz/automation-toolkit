@@ -15,7 +15,7 @@ export interface INetworkSettings {
   chain: 'kovan' | 'mainnet';
 }
 
-export const startAqueductServer = async (pwd: string, networkSettings: INetworkSettings) => {
+export const startAqueductServer = async (pwd: string, networkSettings: INetworkSettings, hostIp = '0.0.0.0') => {
   config.chain = networkSettings.chain;
   config.networkId = networkSettings.id;
   config.nodeUrl = networkSettings.id === 1 ? 'https://mainnet.infura.io' : 'https://kovan.infura.io';
@@ -60,11 +60,11 @@ export const startAqueductServer = async (pwd: string, networkSettings: INetwork
   });
 
   const port = 8700;
-  server.listen(port, '0.0.0.0', (err: Error) => {
+  server.listen(port, hostIp, (err: Error) => {
     if (err) {
       return console.log(err);
     }
-    console.log(`Listening on 0.0.0.0:${port}`);
+    console.log(`Listening on ${hostIp}:${port}`);
   });
 
   return server;
