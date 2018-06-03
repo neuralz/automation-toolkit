@@ -146,6 +146,7 @@ export class MarketService {
     }
 
     await marketRepository.delete({ _id: marketId });
+    await marketWatcher.removeMarket(marketId);
   }
 
   public async generateStats(marketId: string) {
