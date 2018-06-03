@@ -18,6 +18,7 @@ export const openAboutWindow = () => {
       protocol: 'file',
       slashes: true,
       query: {
+        mode: 'about',
         version: app.getVersion()
       }
     }));
