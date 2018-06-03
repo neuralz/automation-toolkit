@@ -1,7 +1,7 @@
 {
   "name": "ercdex-automation-toolkit",
   "description": "ERC dEX Automation Toolkti",
-  "author": "ERC dEX",
+  "author": "ERC dEX <lautry@ercdex.com>",
   "version": "2.0.0",
   "license": "MIT",
   "scripts": {
@@ -10,7 +10,7 @@
     "dist:linux": "yarn compile && electron-builder --linux",
     "dist:mac": "yarn compile && electron-builder --mac",
     "dist": "yarn compile && electron-builder -mwl",
-    "release": "yarn compile && electron-builder -mwl",
+    "release": "yarn compile && electron-builder",
     "generate:aqueduct:remote": "yarn swagger:gen:aqueduct-remote && ts-node --project tsconfig.ts-node.json ./src/node/market-maker-api/swagger/generate-client.ts --baseApiUrl=http://localhost:8700 --namespace AqueductRemote",
     "generate:client": "yarn swagger:gen:market-maker-api && ts-node --project tsconfig.ts-node.json ./src/market-maker-ui/swagger/generate-client.ts --baseApiUrl=http://localhost:8662 --namespace Dashboard",
     "start": "electron-webpack dev",
@@ -146,7 +146,7 @@
     },
     "linux": {
       "target": [
-        "AppImage"
+        "deb"
       ]
     },
     "publish": [
