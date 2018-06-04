@@ -1,0 +1,16 @@
+{
+  "swagger": {
+    "outputDirectory": "./dist/aqueduct-remote",
+    "entryFile": "./src/node/aqueduct-remote/server.ts",
+    "basePath": "/api",
+    "name": "Aqueduct Remote API"
+  },
+  "routes": {
+    "basePath": "/api",
+    "entryFile": "./src/node/aqueduct-remote/server.ts",
+    "routesDir": "./src/node/aqueduct-remote"
+  },
+  "ignore": [
+    "**/node_modules/**"
+  ]
+}

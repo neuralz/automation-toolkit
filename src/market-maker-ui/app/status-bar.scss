@@ -1,0 +1,33 @@
+.status-bar {
+  background-color: #313131;
+  padding: .35rem .5rem;
+  color: #ffffff;
+  font-size: 1rem;
+
+  .connected-circle {
+    border-radius: 50%;
+    height: 12px;
+    width: 12px;
+    background-color: #00b500;
+    display: inline-block;
+    margin-right: .5rem;
+  }
+
+  .link {
+    text-decoration: none;
+    margin-left: 1rem;
+  }
+
+  .remove-account-link {
+    color: #ff8989;
+  }
+
+  .lock-link {
+    color: #6cc6ff;
+  }
+
+  .aligned-text {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}

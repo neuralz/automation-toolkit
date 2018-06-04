@@ -1,11 +1,7 @@
 **/node_modules
 **/dist
 .DS_Store
-.keys
-**/*.db
-parity-data
-data
 .env
-release
-release-*.zip
-health-logs
+static
+yarn-error.log
+out

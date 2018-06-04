@@ -1,0 +1,19 @@
+{
+  "extends": "./node_modules/electron-webpack/tsconfig-base.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@0xproject/typescript-typings/types",
+      "node_modules/@types"
+    ]
+  }
+}
