@@ -128,7 +128,8 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "target": ["dmg"]
+      "target": ["dmg"],
+      "artifactName": "mac-osx-${productName}-${version}.${ext}"
     },
     "win": {
       "target": [
@@ -139,12 +140,14 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "artifactName": "windows-${productName}-${version}.${ext}"
     },
     "linux": {
       "target": [
         "deb"
-      ]
+      ],
+      "artifactName": "ubuntu_debian-${productName}-${version}.${ext}"
     },
     "publish": [
       "github"
