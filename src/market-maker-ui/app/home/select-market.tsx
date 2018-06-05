@@ -1,6 +1,5 @@
 import { History } from 'history';
-
-import { autorun, observable } from 'mobx';
+import { autorun } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
@@ -17,12 +16,10 @@ interface ISelectMarketProps {
 @(withRouter as any)
 @observer
 export class SelectMarket extends React.Component<ISelectMarketProps> {
-  @observable private isCreatingMarket = false;
-
   constructor(public readonly props: ISelectMarketProps) {
     super(props);
     autorun(() => {
-      this.isCreatingMarket = marketStore.markets.length === 0;
+      marketStore.isCreatingMarket = marketStore.markets.length === 0;
     });
   }
 
@@ -48,7 +45,7 @@ export class SelectMarket extends React.Component<ISelectMarketProps> {
             );
           })}
         </div>
-        {this.isCreatingMarket && <CreateMarket onClose={this.onClose} onSuccess={this.onCreateSuccess} />}
+        {marketStore.isCreatingMarket && <CreateMarket onClose={this.onClose} onSuccess={this.onCreateSuccess} />}
       </div>
     );
   }
@@ -58,6 +55,6 @@ export class SelectMarket extends React.Component<ISelectMarketProps> {
     (this.props.history as History).push(getPath(p => p.home.market, { id: market._id }));
   }
 
-  private readonly onClickCreate = () => this.isCreatingMarket = true;
-  private readonly onClose = () => this.isCreatingMarket = false;
+  private readonly onClickCreate = () => marketStore.isCreatingMarket = true;
+  private readonly onClose = () => marketStore.isCreatingMarket = false;
 }

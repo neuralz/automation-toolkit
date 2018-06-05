@@ -38,21 +38,21 @@
   .market-list-item-sub-label {
     color: #818499;
   }
+}
 
-  .add-icon {
-    width: 32px;
-    height: 32px;
-    background-color: #B6A269;
-    cursor: pointer;
+.add-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #B6A269;
+  cursor: pointer;
 
-    &:hover {
-      opacity: .9;
-    }
+  &:hover {
+    opacity: .9;
+  }
 
-    img {
-      width: 16px;
-      height: 16px;
-    }
+  img {
+    width: 16px;
+    height: 16px;
   }
 }
 

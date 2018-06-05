@@ -11,6 +11,7 @@ import { NoAccountModal } from '../no-account-modal';
 import { EnterPassphraseModal } from './enter-passphrase-modal';
 import { MarketView } from './market-view';
 import { SelectMarket } from './select-market';
+import { NoMarketsPlaceholder } from './no-markets-placeholder';
 
 interface IHomeProps {
 }
@@ -39,6 +40,7 @@ export class Home extends React.Component<IHomeProps> {
         <SelectMarket />
         <Route path={getPath(p => p.home.market)} component={MarketView} />
         {marketStore.markets.length > 0 && <Redirect to={getPath(p => p.home.market, marketStore.markets[0]._id)} />}
+        {marketStore.markets.length === 0 && <NoMarketsPlaceholder />}
       </div>
     );
   }
