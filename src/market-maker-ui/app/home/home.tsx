@@ -10,8 +10,8 @@ import { flashMessageStore } from '../flash-message/flash-message-store';
 import { NoAccountModal } from '../no-account-modal';
 import { EnterPassphraseModal } from './enter-passphrase-modal';
 import { MarketView } from './market-view';
-import { SelectMarket } from './select-market';
 import { NoMarketsPlaceholder } from './no-markets-placeholder';
+import { SelectMarket } from './select-market';
 
 interface IHomeProps {
 }

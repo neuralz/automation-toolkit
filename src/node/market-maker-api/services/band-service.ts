@@ -9,7 +9,7 @@ import { IOrder, IOrderRepository, orderRepository, State } from '../db/order-re
 import { ServerError } from '../errors/server-error';
 import { AqueductRemote } from '../swagger/aqueduct-remote';
 import { getAbsoluteSpread } from '../utils/conversion';
-import { getOrderPrice } from '../utils/order-utils';
+import { getOrderPrice, normalizeTokenQuantity } from '../utils/order-utils';
 import { ILogService, LogService } from './log-service';
 import { IOrderService, OrderService } from './order-service';
 import { PriceFeed } from './price-feed';
@@ -340,6 +340,11 @@ export class BandService {
       quantity = quantity.div(adjustedPrice);
     }
 
+    const quantityInWei = normalizeTokenQuantity({
+      value: quantity,
+      decimals: tokenPair.tokenA.decimals
+    }).round().toString();
+
     try {
       const order = await this.tradingService.createLimitOrder({
         request: {
@@ -348,12 +353,12 @@ export class BandService {
           price: adjustedPrice.toString(),
           expirationDate: moment().add(band.expirationSeconds, 'seconds').toDate(),
           side: band.side,
-          quantityInWei: quantity.round().toString()
+          quantityInWei
         }
       });
 
       await this.orderRepo.create({ ...order, bandId: band._id, marketId: band.marketId, softCanceled: false });
-      await this.logService.addBandLog({ bandId: band._id, message: `opened order of ${quantity.toString()} at ${adjustedPrice.toString()}`, severity: 'info' });
+      await this.logService.addBandLog({ bandId: band._id, message: `opened order of ${quantityInWei} at ${adjustedPrice.toString()}`, severity: 'info' });
       await this.logService.addBandLog({ bandId: band._id, message: `band started ${band._id}`, severity: 'success' });
     } catch (err) {
       await this.logService.addBandLog({

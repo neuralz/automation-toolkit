@@ -1397,9 +1397,9 @@ aproba@^1.0.3, aproba@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
 
-aqueduct@^1.2.6:
-  version "1.2.6"
-  resolved "https://registry.yarnpkg.com/aqueduct/-/aqueduct-1.2.6.tgz#b37c44e8ac76b902c538d787fb990dc8bca4af11"
+aqueduct@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/aqueduct/-/aqueduct-1.2.7.tgz#9ee8d115e319c2902ab6cdaeaf2eb14448fd38e3"
   dependencies:
     "0x.js" "0.36.0"
     "@0xproject/types" "^0.7.0"

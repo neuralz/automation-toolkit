@@ -8,16 +8,16 @@ export interface IGetOrderPriceParams {
   baseDecimals: number;
 }
 
-export const getOrderPrice = ({ order, side, baseDecimals }: IGetOrderPriceParams) => {
-  const normalizeTokenPrice = (value: BigNumber) => {
-    return value.times(new BigNumber(10).pow(baseDecimals - 18));
-  };
+export const normalizeTokenQuantity = ({ value, decimals}: { value: BigNumber; decimals: number }) => {
+  return value.times(new BigNumber(10).pow(decimals - 18));
+};
 
+export const getOrderPrice = ({ order, side, baseDecimals }: IGetOrderPriceParams) => {
   const price = side === 'buy'
     ? new BigNumber(order.makerTokenAmount).dividedBy(new BigNumber(order.takerTokenAmount))
     : new BigNumber(order.takerTokenAmount).dividedBy(new BigNumber(order.makerTokenAmount));
 
-  return normalizeTokenPrice(price);
+  return normalizeTokenQuantity({ value: price, decimals: baseDecimals});
 };
 
 export interface IGetOrderAttributesParams {

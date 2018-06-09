@@ -91,7 +91,7 @@ describe('BandService', () => {
 
     const err = await shouldThrow(() => bandService.start(band));
     expect(err.status).to.equal(404);
-    expect(err.constructor.name).to.equal('ServerError');
+    expect(err.constructor.name).to.equal('Error');
   });
 
   it('should record error when price feed fails', async () => {

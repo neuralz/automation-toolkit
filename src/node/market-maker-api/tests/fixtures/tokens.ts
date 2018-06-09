@@ -15,6 +15,13 @@ export const WackToken: IToken = {
   symbol: 'WAK'
 };
 
+export const AstToken: IToken = {
+  decimals: 4,
+  address: 'ast-token',
+  name: 'AirSwap',
+  symbol: 'AST'
+};
+
 export const tokenPair: ITokenPair = {
   tokenA: ScamToken,
   tokenB: WackToken,

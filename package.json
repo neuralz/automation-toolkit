@@ -11,7 +11,7 @@
     "generate:aqueduct:remote": "yarn swagger:gen:aqueduct-remote && ts-node --project tsconfig.ts-node.json ./src/node/market-maker-api/swagger/generate-client.ts --baseApiUrl=http://localhost:8700 --namespace AqueductRemote",
     "generate:client": "yarn swagger:gen:market-maker-api && ts-node --project tsconfig.ts-node.json ./src/market-maker-ui/swagger/generate-client.ts --baseApiUrl=http://localhost:8662 --namespace Dashboard",
     "start": "electron-webpack dev",
-    "test": "rm -rf ./test-data && NODE_ENV=test mocha -t 15000 -r ts-node/register src/tests/**/*.spec.ts",
+    "test": "rm -rf ./test-data && NODE_ENV=test TS_NODE_PROJECT=tsconfig.ts-node.json mocha -t 15000 -r ts-node/register src/**/*.spec.ts",
     "tsoa:gen": "yarn tsoa:aqueduct-remote && yarn tsoa:market-maker-api",
     "tsoa:aqueduct-remote": "yarn swagger:gen:aqueduct-remote && yarn routes:gen:aqueduct-remote",
     "routes:gen:aqueduct-remote": "tsoa --configuration aqueduct-remote-tsoa.json routes",
@@ -23,7 +23,7 @@
   "dependencies": {
     "0x.js": "0.36.0",
     "@0xproject/subproviders": "^0.10.2",
-    "aqueduct": "^1.2.6",
+    "aqueduct": "^1.2.7",
     "body-parser": "^1.18.2",
     "cryptocompare": "^0.5.0",
     "ethereumjs-wallet": "^0.6.0",
@@ -128,9 +128,6 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "target": [
-        "dmg"
-      ],
       "artifactName": "mac-osx-${productName}-${version}.${ext}"
     },
     "win": {
