@@ -23,7 +23,7 @@
   "dependencies": {
     "0x.js": "0.36.0",
     "@0xproject/subproviders": "^0.10.2",
-    "aqueduct": "^1.2.3",
+    "aqueduct": "^1.2.6",
     "body-parser": "^1.18.2",
     "cryptocompare": "^0.5.0",
     "ethereumjs-wallet": "^0.6.0",
@@ -128,7 +128,9 @@
     },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "artifactName": "mac-osx-${productName}-${version}.${ext}"
     },
     "win": {
