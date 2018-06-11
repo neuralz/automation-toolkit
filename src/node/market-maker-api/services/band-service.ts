@@ -328,7 +328,7 @@ export class BandService {
     }
 
     // we don't actually need to place any additional orders
-    if (remainingQuantity.greaterThan(availableTokenBalance.times(band.minUnits).dividedBy(totalUnitsQuantity).toString())) {
+    if (remainingQuantity.greaterThanOrEqualTo(availableTokenBalance.times(band.minUnits).dividedBy(totalUnitsQuantity).toString())) {
       return;
     }
 
