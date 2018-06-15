@@ -70,6 +70,10 @@ export class DefaultPriceFeed extends PriceFeed {
       base = 'ETH';
     }
 
+    if (base === 'ETHOS') {
+      base = 'BQX';
+    }
+
     try {
       const maxTries = 10;
       let tries = 0;
