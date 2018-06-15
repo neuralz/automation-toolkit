@@ -2,7 +2,7 @@
   "name": "ercdex-automation-toolkit",
   "description": "ERC dEX Automation Toolkit",
   "author": "ERC dEX <lautry@ercdex.com>",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "license": "MIT",
   "scripts": {
     "build:web": "webpack --mode=development",

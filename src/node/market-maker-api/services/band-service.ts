@@ -340,10 +340,12 @@ export class BandService {
       quantity = quantity.div(adjustedPrice);
     }
 
-    const quantityInWei = normalizeTokenQuantity({
-      value: quantity,
-      decimals: tokenPair.tokenA.decimals
-    }).round().toString();
+    const quantityInWei = band.side === 'buy'
+      ? normalizeTokenQuantity({
+        value: quantity,
+        decimals: tokenPair.tokenA.decimals
+      }).round().toString()
+      : quantity.round().toString();
 
     try {
       const order = await this.tradingService.createLimitOrder({
