@@ -9,7 +9,7 @@ const models: TsoaRoute.Models = {
       "id": { "dataType": "double", "required": true },
       "dateCreated": { "dataType": "datetime", "required": true },
       "dateUpdated": { "dataType": "datetime", "required": true },
-      "dateClosed": { "dataType": "datetime", "required": true },
+      "dateClosed": { "dataType": "datetime" },
       "networkId": { "dataType": "double", "required": true },
       "exchangeContractAddress": { "dataType": "string", "required": true },
       "expirationUnixTimestampSec": { "dataType": "double", "required": true },
@@ -29,6 +29,7 @@ const models: TsoaRoute.Models = {
       "accountId": { "dataType": "double" },
       "state": { "dataType": "double", "required": true },
       "source": { "dataType": "string", "required": true },
+      "price": { "dataType": "string", "required": true },
     },
   },
   "ILimitOrderRequest": {
@@ -47,7 +48,19 @@ const models: TsoaRoute.Models = {
       "gasPrice": { "dataType": "string" },
     },
   },
+  "IFillOrderRequest": {
+    "properties": {
+      "orderHash": { "dataType": "string", "required": true },
+      "takerAmountInWei": { "dataType": "string", "required": true },
+    },
+  },
   "ICancelReceipt": {
+    "properties": {
+      "gasCost": { "dataType": "string", "required": true },
+      "status": { "dataType": "double", "required": true },
+    },
+  },
+  "IFillReceipt": {
     "properties": {
       "gasCost": { "dataType": "string", "required": true },
       "status": { "dataType": "double", "required": true },
@@ -136,6 +149,25 @@ export function RegisterRoutes(app: any) {
       const promise = controller.softCancelOrder.apply(controller, validatedArgs);
       promiseHandler(controller, promise, response, next);
     });
+  app.post('/api/trading/fill_order',
+    function(request: any, response: any, next: any) {
+      const args = {
+        request: { "in": "body", "name": "request", "required": true, "ref": "IFillOrderRequest" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new TradingController();
+
+
+      const promise = controller.fillOrder.apply(controller, validatedArgs);
+      promiseHandler(controller, promise, response, next);
+    });
   app.post('/api/trading/cancel_receipt/:txHash',
     function(request: any, response: any, next: any) {
       const args = {
@@ -153,6 +185,25 @@ export function RegisterRoutes(app: any) {
 
 
       const promise = controller.getCancelReceipt.apply(controller, validatedArgs);
+      promiseHandler(controller, promise, response, next);
+    });
+  app.post('/api/trading/fill_receipt/:txHash',
+    function(request: any, response: any, next: any) {
+      const args = {
+        txHash: { "in": "path", "name": "txHash", "required": true, "dataType": "string" },
+      };
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new TradingController();
+
+
+      const promise = controller.getFillReceipt.apply(controller, validatedArgs);
       promiseHandler(controller, promise, response, next);
     });
   app.get('/api/wallet/account',

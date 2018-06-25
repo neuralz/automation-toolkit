@@ -1,14 +1,14 @@
 import * as moment from 'moment';
 import { logRepository } from '../db/log-repository';
 import { LogService } from '../services/log-service';
-import { AqueductRemote } from '../swagger/aqueduct-remote';
+import { AqueductServer } from '../swagger/aqueduct-server';
 
 export class CancellationWatcher {
   private isProcessing = false;
   private readonly logService = new LogService();
 
   constructor(
-    private readonly tradingService: AqueductRemote.Api.ITradingService = new AqueductRemote.Api.TradingService()
+    private readonly tradingService: AqueductServer.Api.ITradingService = new AqueductServer.Api.TradingService()
   ) { }
 
   public start() {

@@ -7,7 +7,7 @@ import { IStoredMarket } from '../../db/market-repository';
 import { IStoredOrder, orderRepository, State } from '../../db/order-repository';
 import { BandService } from '../../services/band-service';
 import { PriceFeed } from '../../services/price-feed';
-import { AqueductRemote } from '../../swagger/aqueduct-remote';
+import { AqueductServer } from '../../swagger/aqueduct-server';
 import { getAbsoluteSpread, toBaseUnitAmount } from '../../utils/conversion';
 import { getOrderAttributes } from '../../utils/order-utils';
 import { bandFixture } from '../fixtures/band-fixture';
@@ -28,7 +28,7 @@ describe('BandService', () => {
   let price: BigNumber;
   let id: number;
   let bandService: BandService;
-  let createdOrderMap: { [id: number]: AqueductRemote.Api.IOrder };
+  let createdOrderMap: { [id: number]: AqueductServer.Api.IOrder };
   let remoteOrderMap: { [id: number]: Aqueduct.Api.Order; };
 
   interface ICreateOrderParams {
@@ -130,7 +130,7 @@ describe('BandService', () => {
     bandService = new BandService({
       priceFeed: new TestPriceFeed(),
       tpCache: tokenPairCacheFixture,
-      walletService: mock<AqueductRemote.Api.IWalletService>({
+      walletService: mock<AqueductServer.Api.IWalletService>({
         getBalance: async params => {
           if (params.tokenAddress === ScamToken.address) { return baseBalance; }
           if (params.tokenAddress === WackToken.address) { return quoteBalance; }
@@ -173,19 +173,19 @@ describe('BandService', () => {
     const baseBalance = new BigNumber(validMarket.maxBaseAmount).toString();
     const quoteBalance = new BigNumber(validMarket.maxQuoteAmount).toString();
 
-    let orderRequest: AqueductRemote.Api.ILimitOrderRequest | undefined;
+    let orderRequest: AqueductServer.Api.ILimitOrderRequest | undefined;
 
     bandService = new BandService({
       priceFeed: new TestPriceFeed(),
       tpCache: tokenPairCacheFixture,
-      walletService: mock<AqueductRemote.Api.IWalletService>({
+      walletService: mock<AqueductServer.Api.IWalletService>({
         getBalance: async params => {
           if (params.tokenAddress === ScamToken.address) { return baseBalance; }
           if (params.tokenAddress === WackToken.address) { return quoteBalance; }
           throw new Error('invalid token');
         }
       }),
-      tradingService: mock<AqueductRemote.Api.ITradingService>({
+      tradingService: mock<AqueductServer.Api.ITradingService>({
         createLimitOrder: async ({ request }) => {
           orderRequest = request;
 
@@ -201,7 +201,7 @@ describe('BandService', () => {
             takerTokenAmount: takerTokenAmount.toString(),
             remainingTakerTokenAmount: takerTokenAmount.toString(),
             state: State.Open
-          } as AqueductRemote.Api.IOrder;
+          } as AqueductServer.Api.IOrder;
 
           remoteOrderMap[id] = {
             ...createdOrder
@@ -224,7 +224,7 @@ describe('BandService', () => {
 
     await bandService.start(band);
 
-    const req = orderRequest as AqueductRemote.Api.ILimitOrderRequest;
+    const req = orderRequest as AqueductServer.Api.ILimitOrderRequest;
     expect(req).to.not.equal(undefined);
     expect(req.price).to.equal(expectedPrice.toString());
     expect(req.quantityInWei).to.equal(expectedQuantity);

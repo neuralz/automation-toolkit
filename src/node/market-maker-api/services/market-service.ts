@@ -6,7 +6,7 @@ import { IMarket, IStoredMarket, marketRepository } from '../db/market-repositor
 import { IMarketStatsHistory, marketStatsHistoryRepository } from '../db/market-stats-history-repository';
 import { orderRepository, State } from '../db/order-repository';
 import { ServerError } from '../errors/server-error';
-import { AqueductRemote } from '../swagger/aqueduct-remote';
+import { AqueductServer } from '../swagger/aqueduct-server';
 import { toUnitAmount } from '../utils/conversion';
 import { marketWatcher } from '../worker/market-watcher';
 import { BandService } from './band-service';
@@ -162,7 +162,7 @@ export class MarketService {
       networkId: config.networkId
     });
 
-    const walletService = new AqueductRemote.Api.WalletService();
+    const walletService = new AqueductServer.Api.WalletService();
     const baseBalance = (await walletService.getBalance({ tokenAddress: tokenPair.tokenA.address })).toString();
     const quoteBalance = (await walletService.getBalance({ tokenAddress: tokenPair.tokenB.address })).toString();
     const ethBalance = (await walletService.getEthBalance()).toString();

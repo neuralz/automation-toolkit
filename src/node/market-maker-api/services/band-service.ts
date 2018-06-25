@@ -7,7 +7,7 @@ import { bandRepository, IBandRepository, IStoredBand } from '../db/band-reposit
 import { IMarketRepository, IStoredMarket, marketRepository } from '../db/market-repository';
 import { IOrder, IOrderRepository, orderRepository, State } from '../db/order-repository';
 import { ServerError } from '../errors/server-error';
-import { AqueductRemote } from '../swagger/aqueduct-remote';
+import { AqueductServer } from '../swagger/aqueduct-server';
 import { getAbsoluteSpread } from '../utils/conversion';
 import { getOrderPrice, normalizeTokenQuantity } from '../utils/order-utils';
 import { ILogService, LogService } from './log-service';
@@ -37,8 +37,8 @@ export interface IBandServiceParams {
   orderRepo?: IOrderRepository;
   aqueductOrdersService?: Aqueduct.Api.IOrdersService;
   bandRepo?: IBandRepository;
-  tradingService?: AqueductRemote.Api.ITradingService;
-  walletService?: AqueductRemote.Api.IWalletService;
+  tradingService?: AqueductServer.Api.ITradingService;
+  walletService?: AqueductServer.Api.IWalletService;
 }
 
 export type BandContainmentStatus = 'contained' | 'loss-risk' | 'no-loss-risk';
@@ -59,8 +59,8 @@ export class BandService {
   private readonly orderRepo: IOrderRepository;
   private readonly aqueductOrdersService: Aqueduct.Api.IOrdersService;
   private readonly bandRepo: IBandRepository;
-  private readonly tradingService: AqueductRemote.Api.ITradingService;
-  private readonly walletService: AqueductRemote.Api.IWalletService;
+  private readonly tradingService: AqueductServer.Api.ITradingService;
+  private readonly walletService: AqueductServer.Api.IWalletService;
   private readonly logService: ILogService;
   private readonly orderService: IOrderService;
 
@@ -72,8 +72,8 @@ export class BandService {
     this.orderRepo = params.orderRepo || orderRepository;
     this.aqueductOrdersService = params.aqueductOrdersService || new Aqueduct.Api.OrdersService();
     this.bandRepo = params.bandRepo || bandRepository;
-    this.tradingService = params.tradingService || new AqueductRemote.Api.TradingService();
-    this.walletService = params.walletService || new AqueductRemote.Api.WalletService();
+    this.tradingService = params.tradingService || new AqueductServer.Api.TradingService();
+    this.walletService = params.walletService || new AqueductServer.Api.WalletService();
     this.orderService = new OrderService(this.tradingService, this.aqueductOrdersService);
   }
 

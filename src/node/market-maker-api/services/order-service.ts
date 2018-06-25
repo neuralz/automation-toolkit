@@ -1,6 +1,6 @@
 import { Aqueduct } from 'aqueduct';
 import { IStoredOrder, orderRepository, State } from '../db/order-repository';
-import { AqueductRemote } from '../swagger/aqueduct-remote';
+import { AqueductServer } from '../swagger/aqueduct-server';
 import { GasService } from './gas-service';
 import { LogService } from './log-service';
 
@@ -15,7 +15,7 @@ export class OrderService implements IOrderService {
   private readonly logService = new LogService();
 
   constructor(
-    private readonly tradingService: AqueductRemote.Api.ITradingService = new AqueductRemote.Api.TradingService(),
+    private readonly tradingService: AqueductServer.Api.ITradingService = new AqueductServer.Api.TradingService(),
     private readonly aqueductOrdersService: Aqueduct.Api.IOrdersService = new Aqueduct.Api.OrdersService()
   ) { }
 

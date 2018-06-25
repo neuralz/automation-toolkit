@@ -1,9 +1,12 @@
 import { PrivateKeyWalletSubprovider } from '@0xproject/subproviders';
 import * as Web3 from 'web3';
-import ProviderEngine from 'web3-provider-engine';
-import RpcSubprovider from 'web3-provider-engine/subproviders/rpc';
 import { config } from '../config';
 import { KeyService } from './key-service';
+
+// tslint:disable-next-line
+const ProviderEngine = require('web3-provider-engine');
+// tslint:disable-next-line
+const RpcSubprovider = require('web3-provider-engine/subproviders/rpc');
 
 export class Web3Service {
   private web3map: { [nodeUrl: string]: Web3 | undefined } = {};

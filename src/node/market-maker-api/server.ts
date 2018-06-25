@@ -14,19 +14,15 @@ import './controllers/token-pairs-controller';
 import { reportRoutes } from './report-routes';
 import { RegisterRoutes } from './routes';
 import { PendingAqueductService } from './services/pending-aqueduct-service';
-import { AqueductRemote } from './swagger/aqueduct-remote';
+import { AqueductServer } from './swagger/aqueduct-server';
 import { Worker } from './worker/worker';
-// tslint:disable-next-line
-const webSocket = require('html5-websocket');
 
 export const startServer = async (pwd: string, hostIp = '0.0.0.0') => {
-  (global as any).WebSocket = webSocket;
-
-  AqueductRemote.Initialize({ host: 'localhost:8700' });
+  AqueductServer.Initialize({ host: 'localhost:8700' });
   Aqueduct.Initialize();
 
-  await new PendingAqueductService().waitForAqueductRemote();
-  const network = await new AqueductRemote.Api.WalletService().getNetwork();
+  await new PendingAqueductService().waitForAqueductServer();
+  const network = await new AqueductServer.Api.WalletService().getNetwork();
   config.networkId = network.id;
   config.pwd = pwd;
   config.chain = network.chain as 'kovan' | 'mainnet';

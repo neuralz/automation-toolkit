@@ -135,16 +135,11 @@ export class KeyService {
     };
   }
 
-  private readKeyFile() {
-    const rawContent = fs.readFileSync(this.keyFilePath).toString();
-    return JSON.parse(rawContent) as IKeyFile;
-  }
-
-  private isUnlocked() {
+  public isUnlocked() {
     return typeof instance !== 'undefined';
   }
 
-  private isImported() {
+  public isImported() {
     try {
       this.readKeyFile();
       return true;
@@ -153,7 +148,12 @@ export class KeyService {
     }
   }
 
+  private readKeyFile() {
+    const rawContent = fs.readFileSync(this.keyFilePath).toString();
+    return JSON.parse(rawContent) as IKeyFile;
+  }
+
   private get keyFilePath() {
-    return path.join(config.pwd, 'store.json');
+    return path.join(config.keyDir || config.pwd, 'store.json');
   }
 }

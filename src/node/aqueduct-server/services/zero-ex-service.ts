@@ -10,6 +10,11 @@ export interface ICancelReceipt {
   status: number;
 }
 
+export interface IFillReceipt {
+  gasCost: string;
+  status: number;
+}
+
 export class ZeroExService {
   public async getTokenBalance(tokenAddress: string) {
     const account = new KeyService().getAccount();
@@ -46,6 +51,20 @@ export class ZeroExService {
       } as ICancelReceipt;
     } catch (err) {
       throw new ServerError(`cancel ${txHash} not yet mined`);
+    }
+  }
+
+  public async getFillReceipt(txHash: string): Promise<IFillReceipt> {
+    try {
+      const receipt = await this.getZeroEx().awaitTransactionMinedAsync(txHash, 5000);
+      const tx = await this.getTx(txHash);
+
+      return {
+        gasCost: tx.gasPrice.times(tx.gas).toString(),
+        status: receipt.status
+      } as ICancelReceipt;
+    } catch (err) {
+      throw new ServerError(`fill ${txHash} not yet mined`);
     }
   }
 

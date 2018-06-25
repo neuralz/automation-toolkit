@@ -3,7 +3,7 @@ import { autoUpdater } from 'electron-updater';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as url from 'url';
-import { INetworkSettings, startAqueductServer } from './aqueduct-remote/server';
+import { INetworkSettings, startAqueductServer } from './aqueduct-server/server';
 import { checkForUpdates } from './check-for-updates';
 import { startServer } from './market-maker-api/server';
 import { openAboutWindow } from './windows/about';

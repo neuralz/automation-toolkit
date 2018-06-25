@@ -4,13 +4,11 @@ RUN mkdir -p /app
 RUN mkdir -p /app/keys
 COPY package.json /app
 COPY yarn.lock /app
-RUN apt-get update
 
 WORKDIR /app
-RUN yarn
+RUN yarn --production
 
 COPY . /app
-RUN yarn build
 
 EXPOSE 8700
-ENTRYPOINT yarn start:server
+ENTRYPOINT node ./dist/node/aqueduct-server/start-server.js

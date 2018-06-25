@@ -4,7 +4,7 @@ export interface IOrder {
   id: number;
   dateCreated: Date;
   dateUpdated: Date;
-  dateClosed: Date;
+  dateClosed?: Date;
   networkId: number;
   exchangeContractAddress: string;
   expirationUnixTimestampSec: number;
@@ -27,6 +27,7 @@ export interface IOrder {
   marketId: string;
   bandId: string;
   softCanceled: boolean;
+  price: string;
 }
 
 export enum State {

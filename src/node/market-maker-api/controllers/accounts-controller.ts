@@ -1,5 +1,5 @@
 import { Body, Delete, Get, Post, Query, Route, Tags } from 'tsoa';
-import { AqueductRemote } from '../swagger/aqueduct-remote';
+import { AqueductServer } from '../swagger/aqueduct-server';
 
 export interface IImportAccountRequest {
   passphrase: string;
@@ -35,51 +35,51 @@ export class AccountsController {
   @Get()
   @Tags('Accounts')
   public async getAccount(): Promise<string> {
-    return await new AqueductRemote.Api.WalletService().getAccount();
+    return await new AqueductServer.Api.WalletService().getAccount();
   }
 
   @Post('import')
   @Tags('Accounts')
   public async importAccount(@Body() request: IImportAccountRequest) {
-    await new AqueductRemote.Api.WalletService().importAccount({ request });
+    await new AqueductServer.Api.WalletService().importAccount({ request });
   }
 
   @Delete('remove')
   @Tags('Accounts')
   public async removeAccount() {
-    await new AqueductRemote.Api.WalletService().removeAccount();
+    await new AqueductServer.Api.WalletService().removeAccount();
   }
 
   @Post('unlock')
   @Tags('Accounts')
   public async unlockAccount(@Body() request: IUnlockAccountRequest) {
-    await new AqueductRemote.Api.WalletService().unlockAccount({ request });
+    await new AqueductServer.Api.WalletService().unlockAccount({ request });
   }
 
   @Post('lock')
   @Tags('Accounts')
   public async lock() {
-    await new AqueductRemote.Api.WalletService().lockAccount();
+    await new AqueductServer.Api.WalletService().lockAccount();
   }
 
   @Get('configuration_status')
   @Tags('Accounts')
   public async getConfigurationStatus(): Promise<IConfigurationStatus> {
-    return await new AqueductRemote.Api.WalletService().getConfigurationStatus();
+    return await new AqueductServer.Api.WalletService().getConfigurationStatus();
   }
 
   @Get('get_token_stats')
   @Tags('Accounts')
   public async getTokenStats(@Query() tokenAddress: string): Promise<ITokenStats> {
-    const balance = await new AqueductRemote.Api.WalletService().getBalance({ tokenAddress });
-    const allowance = await new AqueductRemote.Api.WalletService().getAllowance({ tokenAddress });
+    const balance = await new AqueductServer.Api.WalletService().getBalance({ tokenAddress });
+    const allowance = await new AqueductServer.Api.WalletService().getAllowance({ tokenAddress });
     return { balance, allowance };
   }
 
   @Post('set_unlimited_allowance')
   @Tags('Accounts')
   public async setUnlimitedAllowance(@Body() request: ISetAllowanceRequest) {
-    const walletService = new AqueductRemote.Api.WalletService();
+    const walletService = new AqueductServer.Api.WalletService();
     await walletService.unlockAccount({ request: { passphrase: request.passphrase } });
     await walletService.setUnlimitedAllowance({ tokenAddress: request.tokenAddress });
   }
@@ -87,12 +87,12 @@ export class AccountsController {
   @Get('get_eth_balance')
   @Tags('Accounts')
   public async getEthBalance(): Promise<string> {
-    return await new AqueductRemote.Api.WalletService().getEthBalance();
+    return await new AqueductServer.Api.WalletService().getEthBalance();
   }
 
   @Get('get_network')
   @Tags('Accounts')
   public async getNetwork(): Promise<INetwork> {
-    return await new AqueductRemote.Api.WalletService().getNetwork();
+    return await new AqueductServer.Api.WalletService().getNetwork();
   }
 }

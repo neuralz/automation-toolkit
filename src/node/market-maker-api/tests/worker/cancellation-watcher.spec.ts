@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import * as moment from 'moment';
 import { logRepository } from '../../db/log-repository';
 import { IStoredCancelLog, LogService } from '../../services/log-service';
-import { AqueductRemote } from '../../swagger/aqueduct-remote';
+import { AqueductServer } from '../../swagger/aqueduct-server';
 import { CancellationWatcher } from '../../worker/cancellation-watcher';
 import { mock } from '../utils/mock';
 
@@ -16,7 +16,7 @@ describe('CancellationWatcher', () => {
       marketId: 'any-market-id'
     });
 
-    const watcher = new CancellationWatcher(mock<AqueductRemote.Api.ITradingService>({
+    const watcher = new CancellationWatcher(mock<AqueductServer.Api.ITradingService>({
       getCancelReceipt: async () => {
         return {
           gasCost: '1234',
@@ -40,7 +40,7 @@ describe('CancellationWatcher', () => {
     log.dateCreated = moment().subtract(1, 'day').toDate();
     await logRepository.update({ _id: log._id }, log);
 
-    const watcher = new CancellationWatcher(mock<AqueductRemote.Api.ITradingService>({
+    const watcher = new CancellationWatcher(mock<AqueductServer.Api.ITradingService>({
       getCancelReceipt: async () => {
         throw new Error();
       }

@@ -1,5 +1,6 @@
 import { Aqueduct } from 'aqueduct';
 import * as bodyParser from 'body-parser';
+import chalk from 'chalk';
 import * as express from 'express';
 import * as http from 'http';
 import * as methodOverride from 'method-override';
@@ -7,20 +8,18 @@ import { config } from './config';
 import './controllers/trading-controller';
 import './controllers/wallet-controller';
 import { RegisterRoutes } from './routes';
-// tslint:disable-next-line
-const webSocket = require('html5-websocket');
 
 export interface INetworkSettings {
   id: number;
   chain: 'kovan' | 'mainnet';
 }
 
-export const startAqueductServer = async (pwd: string, networkSettings: INetworkSettings, hostIp = '0.0.0.0') => {
+export const startAqueductServer = async (pwd: string, networkSettings: INetworkSettings, hostIp = '0.0.0.0', keyDir?: string) => {
   config.chain = networkSettings.chain;
   config.networkId = networkSettings.id;
   config.nodeUrl = networkSettings.id === 1 ? 'https://mainnet.infura.io' : 'https://kovan.infura.io';
   config.pwd = pwd;
-  (global as any).WebSocket = webSocket;
+  config.keyDir = keyDir;
 
   Aqueduct.Initialize();
 
@@ -64,7 +63,7 @@ export const startAqueductServer = async (pwd: string, networkSettings: INetwork
     if (err) {
       return console.log(err);
     }
-    console.log(`Listening on ${hostIp}:${port}`);
+    console.log(chalk.green(`Aqueduct Server started on port ${port}.`));
   });
 
   return server;

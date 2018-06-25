@@ -1,22 +1,13 @@
 version: '3'
 services:
-  api:
-    build: ./api
+  aqueduct-server:
+    build: .
     ports:
-      - "8662:8662"
-    links:
-      - aqueduct-remote
-    volumes:
-      - ./api/data:/app/data
-      - ./api/dist:/app/dist
-      - ./api/src:/app/src
-  aqueduct-remote:
-    build: ./aqueduct-remote
-    expose:
-      # DO NOT CHANGE! Aqueduct remote should not be exposed to the host, only to linked containers
-      - "8700"
+      - "8700:8700"
     environment:
       - ETHEREUM_CHAIN
     volumes:
-      - ./aqueduct-remote/dist:/app/dist
-      - ./aqueduct-remote/src:/app/src
+      - ./sdk/keys:/app/key
+    tty: true
+    stdin_open: true
+

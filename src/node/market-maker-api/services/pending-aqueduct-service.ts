@@ -1,4 +1,4 @@
-import { AqueductRemote } from '../swagger/aqueduct-remote';
+import { AqueductServer } from '../swagger/aqueduct-server';
 
 const sleep = (ms: number) => {
   return new Promise(r => setTimeout(() => r(), ms));
@@ -6,10 +6,10 @@ const sleep = (ms: number) => {
 
 export class PendingAqueductService {
   constructor(
-    private readonly walletService: AqueductRemote.Api.IWalletService = new AqueductRemote.Api.WalletService()
+    private readonly walletService: AqueductServer.Api.IWalletService = new AqueductServer.Api.WalletService()
   ) { }
 
-  public async waitForAqueductRemote() {
+  public async waitForAqueductServer() {
     while (true) {
       try {
         await this.walletService.getNetwork();

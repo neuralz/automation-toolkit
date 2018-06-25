@@ -1,0 +1,22 @@
+{
+  "swagger": {
+    "outputDirectory": "./dist/node/aqueduct-server",
+    "entryFile": "./src/node/aqueduct-server/server.ts",
+    "basePath": "/api",
+    "name": "Aqueduct Server API",
+    "host": "localhost:8700",
+    "spec": {
+      "schemes": [
+        "http"
+      ]
+    }
+  },
+  "routes": {
+    "basePath": "/api",
+    "entryFile": "./src/node/aqueduct-server/server.ts",
+    "routesDir": "./src/node/aqueduct-server"
+  },
+  "ignore": [
+    "**/node_modules/**"
+  ]
+}

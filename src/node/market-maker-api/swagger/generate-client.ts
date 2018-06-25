@@ -371,7 +371,7 @@ const getTemplateView = (swagger: Swagger.ISpec): ITemplateView => {
 };
 
 const getSwaggerSpec = () => {
-  const rawSwagger = fs.readFileSync(path.join(process.cwd(), 'dist/aqueduct-remote/swagger.json')).toString();
+  const rawSwagger = fs.readFileSync(path.join(process.cwd(), 'dist/node/aqueduct-server/swagger.json')).toString();
   return JSON.parse(rawSwagger);
 };
 
@@ -380,7 +380,7 @@ const getSwaggerSpec = () => {
 
   try {
     const compiled = template()(getTemplateView(spec));
-    fs.writeFileSync(path.join(process.cwd(), 'src/node/market-maker-api/swagger/aqueduct-remote.ts'), compiled);
+    fs.writeFileSync(path.join(process.cwd(), 'src/node/market-maker-api/swagger/aqueduct-server.ts'), compiled);
     console.log('Api file generated!');
   } catch (err) {
     console.log(err);

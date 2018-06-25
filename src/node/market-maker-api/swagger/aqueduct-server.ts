@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { ApiService, IRequestParams } from './api-service';
 
-export namespace AqueductRemote {
+export namespace AqueductServer {
   let baseApiUrl: string;
 
   export const Initialize = (params: { host: string; }) => {
@@ -14,29 +14,96 @@ export namespace AqueductRemote {
   export namespace Api {
 
     export interface IOrder {
+      /**
+       * Unique Identifier
+       */
       id: number;
+      /**
+       * Date of creation
+       */
       dateCreated: Date;
+      /**
+       * Date of updated
+       */
       dateUpdated: Date;
-      dateClosed: Date;
+      /**
+       * Date on which the order was closed through fill, cancel, etc
+       */
+      dateClosed?: Date;
+      /**
+       * ID of the Ethereum network the order is associated with
+       */
       networkId: number;
+      /**
+       * 0x Exchange Contract Address
+       */
       exchangeContractAddress: string;
+      /**
+       * Unix timestamp of order expiration (in seconds)
+       */
       expirationUnixTimestampSec: number;
+      /**
+       * Address of the fee recipient
+       */
       feeRecipient: string;
+      /**
+       * Address of the order maker
+       */
       maker: string;
+      /**
+       * Fee due from maker on order fill
+       */
       makerFee: string;
+      /**
+       * Token address of the maker token
+       */
       makerTokenAddress: string;
+      /**
+       * Total amount of maker token in order
+       */
       makerTokenAmount: string;
+      /**
+       * Secure salt
+       */
       salt: string;
+      /**
+       * Serialized version of the EC signature for signed orders
+       */
       serializedEcSignature: string;
+      /**
+       * Taker address; generally a null taker
+       */
       taker: string;
+      /**
+       * Fee due from taker on order fill
+       */
       takerFee: string;
+      /**
+       * Token address of the taker token
+       */
       takerTokenAddress: string;
+      /**
+       * Total amount of taker token in order
+       */
       takerTokenAmount: string;
+      /**
+       * Remaining amount in the order in terms of taker token units
+       */
       remainingTakerTokenAmount: string;
+      /**
+       * The hash of the signed order
+       */
       orderHash: string;
+      /**
+       * Account ID of originator
+       */
       accountId?: number;
+      /**
+       * State of the order: Open (0), Canceled (1), Filled (2), Expired(3), Removed(4), PendingCancel (5)
+       */
       state: number;
       source: string;
+      price: string;
     }
 
     export interface ILimitOrderRequest {
@@ -53,7 +120,17 @@ export namespace AqueductRemote {
       gasPrice?: string;
     }
 
+    export interface IFillOrderRequest {
+      orderHash: string;
+      takerAmountInWei: string;
+    }
+
     export interface ICancelReceipt {
+      gasCost: string;
+      status: number;
+    }
+
+    export interface IFillReceipt {
       gasCost: string;
       status: number;
     }
@@ -90,7 +167,21 @@ export namespace AqueductRemote {
       orderHash: string;
     }
 
+    export interface ITradingFillOrderParams {
+      request: IFillOrderRequest;
+    }
+
     export interface ITradingGetCancelReceiptParams {
+      /**
+       * Transaction Hash
+       */
+      txHash: string;
+    }
+
+    export interface ITradingGetFillReceiptParams {
+      /**
+       * Transaction Hash
+       */
       txHash: string;
     }
 
@@ -116,8 +207,23 @@ export namespace AqueductRemote {
     export interface ITradingService {
       createLimitOrder(params: ITradingCreateLimitOrderParams): Promise<IOrder>;
       cancelOrder(params: ITradingCancelOrderParams): Promise<string>;
+      /**
+       * Soft cancel an order by orderHash
+Removes the order from the order book, but can still be potentially filled
+       */
       softCancelOrder(params: ITradingSoftCancelOrderParams): Promise<void>;
+      /**
+       * Fill an order by orderHash
+       */
+      fillOrder(params: ITradingFillOrderParams): Promise<string>;
+      /**
+       * Attempt to retrieve the transaction receipt of a cancellation\
+       */
       getCancelReceipt(params: ITradingGetCancelReceiptParams): Promise<ICancelReceipt>;
+      /**
+       * Syncronously retrieve the transaction receipt of a order fill
+       */
+      getFillReceipt(params: ITradingGetFillReceiptParams): Promise<IFillReceipt>;
     }
 
     export class TradingService extends ApiService implements ITradingService {
@@ -142,6 +248,10 @@ export namespace AqueductRemote {
         return this.executeRequest<string>(requestParams);
       }
 
+      /**
+       * Soft cancel an order by orderHash
+Removes the order from the order book, but can still be potentially filled
+       */
       public async softCancelOrder(params: ITradingSoftCancelOrderParams) {
         const requestParams: IRequestParams = {
           method: 'POST',
@@ -150,12 +260,39 @@ export namespace AqueductRemote {
         return this.executeRequest<void>(requestParams);
       }
 
+      /**
+       * Fill an order by orderHash
+       */
+      public async fillOrder(params: ITradingFillOrderParams) {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/trading/fill_order`
+        };
+
+        requestParams.body = params.request;
+        return this.executeRequest<string>(requestParams);
+      }
+
+      /**
+       * Attempt to retrieve the transaction receipt of a cancellation\
+       */
       public async getCancelReceipt(params: ITradingGetCancelReceiptParams) {
         const requestParams: IRequestParams = {
           method: 'POST',
           url: `${baseApiUrl}/api/trading/cancel_receipt/${params.txHash}`
         };
         return this.executeRequest<ICancelReceipt>(requestParams);
+      }
+
+      /**
+       * Syncronously retrieve the transaction receipt of a order fill
+       */
+      public async getFillReceipt(params: ITradingGetFillReceiptParams) {
+        const requestParams: IRequestParams = {
+          method: 'POST',
+          url: `${baseApiUrl}/api/trading/fill_receipt/${params.txHash}`
+        };
+        return this.executeRequest<IFillReceipt>(requestParams);
       }
     }
     export interface IWalletService {
